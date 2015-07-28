@@ -1,0 +1,28 @@
+{
+  "name": "CodeMana",
+  "version": "1.0.0",
+  "description": "Enhance GitHub Gists",
+  "main": "index.js",
+  "dependencies": {
+    "prismjs": "^0.0.1",
+    "qwest": "^2.0.3",
+    "react": "^0.13.3",
+    "react-async": "^2.1.0",
+    "react-modal": "^0.3.0",
+    "react-router-component": "^0.26.0"
+  },
+  "devDependencies": {
+    "browserify": "latest",
+    "reactify": "latest",
+    "cssify": "latest",
+    "watchify": "latest",
+    "uglifyjs": "latest"
+  },
+  "scripts": {
+    "build-dev": "node_modules/.bin/browserify -t reactify app/components/*.jsx -o public/js/script.js",
+    "build-prod": "node_modules/.bin/browserify -t reactify app/components/*.jsx | node_modules/.bin/uglifyjs > public/js/script.min.js",
+    "watch": "node_modules/.bin/watchify -t reactify app/components/*.jsx -o public/js/script.js"
+  },
+  "author": "Jim Saunders",
+  "license": "MIT"
+}

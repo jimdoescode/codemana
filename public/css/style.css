@@ -1,0 +1,136 @@
+@import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700);
+
+a, .pure-menu-link, .pure-menu-heading {
+    color: #ce6849;
+    text-decoration: none;
+}
+a:hover, a:focus {
+    color: #ab4526;
+    text-decoration: underline;
+}
+body {background-color: #37393a;}
+pre {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    border-radius: inherit;
+    color: inherit;
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+}
+.app-header nav {
+    border-bottom: 1px solid #000;
+    background-color: #282a2b;
+    height: 50px;
+    font-size: 12pt;
+    padding-top: 0.5em;
+    text-shadow: 0 -.1em .2em #000;
+}
+.app-header nav .pure-form {
+    margin-left: 3em;
+}
+.app-header nav .pure-form input[type="text"] {
+    padding: 0.3em 0.3em;
+}
+.app-header nav .pure-menu-link {
+    padding-top: 0;
+}
+.app-header nav .pure-menu-link:focus,
+.app-header nav .pure-menu-link:hover {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+footer {margin-top: 20px;}
+.fa-flask {color: #54b0ff;}
+.app-header nav .logo {
+    font-size: 16pt;
+    padding: 0;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+    .app-header nav .logo .fa-flask {font-size: 18pt;}
+.logo:hover, .logo:focus {text-decoration: none;}
+    .logo:hover .fa-flask, .logo:focus .fa-flask {color: #4383c1;}
+
+.main {padding-top: 50px;}
+.hero {
+    padding: 2% 10%;
+    width: 80%;
+    background-color: #282a2b;
+    margin-top: 20px;
+    font-size: 32pt;
+    color: #eee;
+    text-align: center;
+    border-radius: 3px;
+}
+.container {
+    width: 1140px;
+    margin: auto;
+}
+.code-file-container {
+    border-radius: 3px;
+    margin-top: 20px;
+    max-width: 1140px;
+    overflow: scroll;
+    text-shadow: 0 -.1em .2em #000;
+}
+
+.code-file {width: 100%;}
+    .code-file .spacer {height: 3px;}
+    .code-file .line {
+        min-height: 10px;
+        background-color: #121415;
+        color: #eee;
+        cursor: pointer;
+    }
+        .code-file .line pre {
+            padding: 2px 0 4px 5px;
+            vertical-align: top;
+            overflow: hidden;
+        }
+
+.line-num {
+    padding: 1px 5px;
+    text-align: right;
+    background-color: #282a2b;
+    max-width: 30px;
+    overflow: hidden;
+}
+
+.pull-left {float: left;}
+.pull-right {float: right;}
+
+.line-comment {
+    width: 100%;
+    padding: 0 5px;
+    overflow: hidden;
+    cursor: default;
+}
+    .line-comment .avatar {
+        width: 48px;
+        height: 48px;
+    }
+        .line-comment .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 3px;
+        }
+
+    .line-comment .content {
+        margin-left: 5px;
+        border-radius: 3px;
+        overflow: hidden;
+        max-width: 1050px;
+    }
+
+    .line-comment .content .comment-header {
+        background-color: #282a2b;
+        padding: 10px;
+        overflow: hidden
+    }
+
+    .line-comment .content .comment-body {
+        background-color: #37393a;
+        padding: 20px 10px;
+        margin: 0;
+    }
