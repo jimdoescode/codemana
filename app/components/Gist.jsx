@@ -82,12 +82,6 @@ module.exports = React.createClass({
         });
     },
 
-    shouldComponentUpdate: function(newProps, newState) {
-        return  newProps.id !== this.props.id ||
-                newState.files.length !== this.state.files.length ||
-                (this.state.files.length > 0 && newState.comments.length > 0);
-    },
-
     render: function() {
         return (
             <div className="container main">
