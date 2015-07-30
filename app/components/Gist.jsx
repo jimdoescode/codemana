@@ -70,8 +70,8 @@ module.exports = React.createClass({
      * If the comments AJAX call returns before the Gist
      * AJAX call then we don't want to render.
      */
-    shouldComponentUpdate: function() {
-        return true;//this.state.files.length !== 0;
+    shouldComponentUpdate: function(newProps, newState) {
+        return newProps.id !== this.props.id || newState.files.length !== 0;
     },
 
     render: function() {

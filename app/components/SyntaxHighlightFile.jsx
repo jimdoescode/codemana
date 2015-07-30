@@ -1,6 +1,5 @@
 var React = require("react");
 var Prism = require("prismjs");
-var BlockToggle = require("./BlockToggle.jsx");
 
 module.exports = React.createClass({
     tokenizeNewLines: function(str) {
@@ -69,7 +68,8 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            lines: []
+            lines: [],
+            activeCommentLine: 0
         };
     },
 
@@ -82,6 +82,14 @@ module.exports = React.createClass({
         };
     },
 
+    handleLineClick: function(lineNum, event) {
+        event.preventDefault();
+        if (this.state.activeCommentLine === lineNum)
+            lineNum = 0;
+
+        this.setState({activeCommentLine: lineNum});
+    },
+
     render: function() {
         var self = this;
         var rows = [];
@@ -90,11 +98,11 @@ module.exports = React.createClass({
         for (var i=0; i < lineCount; i++) {
             var num = i + 1;
 
-            if (self.props.comments[i+1]) {
-                rows.push(<SyntaxHighlightLine key={self.props.name + num} file={self.props.name} number={num} code={self.state.lines[i]} toggle={self.props.name+"-C"+(i + 1)}/>);
-                rows.push(<LineComments key={self.props.name + num + 'comments'} file={self.props.name} number={num} comments={self.props.comments[num]}/>);
+            if (self.props.comments[i+1] || num === self.state.activeCommentLine) {
+                rows.push(<SyntaxHighlightLine onClick={self.handleLineClick.bind(this, num)} key={self.props.name + num} file={self.props.name} number={num} code={self.state.lines[i]} toggle={self.props.name+"-C"+(i + 1)}/>);
+                rows.push(<LineComments key={self.props.name + num + 'comments'} file={self.props.name} number={num} comments={self.props.comments[num]} showForm={num === self.state.activeCommentLine}/>);
             } else {
-                rows.push(<SyntaxHighlightLine key={self.props.name + num} file={self.props.name} number={num} code={self.state.lines[i]}/>);
+                rows.push(<SyntaxHighlightLine onClick={self.handleLineClick.bind(this, num)} key={self.props.name + num} file={self.props.name} number={num} code={self.state.lines[i]}/>);
             }
         }
 
@@ -105,10 +113,7 @@ module.exports = React.createClass({
                         <tr className="spacer line">
                             <td/>
                             <td className="line-num"/>
-                            <td className="line-content">
-                                <pre/>
-                                <CommentBox/>
-                            </td>
+                            <td className="line-content"><pre/></td>
                         </tr>
                         {rows}
                         <tr className="spacer line">
@@ -129,28 +134,19 @@ var SyntaxHighlightLine = React.createClass({
             number: 0,
             code: '',
             file: '',
-            toggle: false
+            toggle: false,
+            onClick: function() {}
         }
     },
 
-    lineClick: function(event) {
-        var lineNum = this.props.number;
-        var commentBox = document.getElementById('comment-box');
-
-        commentBox.style.display = 'none';
-        event.preventDefault();
-
-
-    },
-
     render: function() {
-        var toggleCol = this.props.toggle ? <td><BlockToggle toggle={this.props.toggle}/></td> : <td/>
-
+        var toggleCol = this.props.toggle ? <td><CommentToggle toggle={this.props.toggle}/></td> : <td/>
+        var self = this;
         return (
-            <tr id={this.props.file+"-L"+this.props.number} className="line">
+            <tr id={self.props.file+"-L"+self.props.number} className="line">
                 {toggleCol}
                 <td className="line-num">{this.props.number}</td>
-                <td onClick={this.lineClick} className="line-content"><pre dangerouslySetInnerHTML={{__html: this.props.code}}/></td>
+                <td className="line-content" onClick={self.props.onClick}><pre dangerouslySetInnerHTML={{__html: this.props.code}}/></td>
             </tr>
         );
     }
@@ -161,17 +157,26 @@ var LineComments = React.createClass({
         return {
             number: 0,
             file: '',
-            comments: []
+            comments: [],
+            showForm: false
         }
+    },
+
+    handleCommentSubmission: function(event) {
+        event.preventDefault();
+
     },
 
     render: function() {
         var self = this;
+        var commentForm = self.props.showForm ? <CommentForm onSubmit={self.handleCommentSubmission}/> : '';
         return (
             <tr id={self.props.file+"-C"+self.props.number} className="line comment-row">
                 <td/>
                 <td className="line-num"/>
                 <td>
+                {commentForm}
+
                 {
                     self.props.comments.map(function(comment) {
                         return (
@@ -193,21 +198,60 @@ var LineComments = React.createClass({
     }
 });
 
-var CommentBox = React.createClass({
+var CommentForm = React.createClass({
     getDefaultProps: function() {
         return {
-            handleSubmit: function() {}
+            onSubmit: function() {}
         }
     },
 
     render: function() {
         return (
-            <div id="comment-box" style="display: none;">
-                <form action="#" onSubmit={this.props.handleSubmit}>
-                    <textarea name="comment-body" placeholder="Enter your comment..."/>
-                    <input type="submit" className="pure-button pure-button-primary"/>
-                </form>
+            <div className="line-comment">
+                <a className="avatar pull-left" href="#"><img src="" alt=""/></a>
+                <div className="pull-left content">
+                    <form action="#" onSubmit={this.props.onSubmit} className="comment-body">
+                        <textarea name="comment-body" placeholder="Enter your comment..."></textarea>
+                        <input type="submit" className="pure-button pure-button-primary"/>
+                    </form>
+                </div>
             </div>
+        );
+    }
+});
+
+var CommentToggle = React.createClass({
+    getInitialState: function() {
+        return {
+            display: 'none',
+            symbolClass: this.props.closeIcon
+        };
+    },
+
+    getDefaultProps: function() {
+        return {
+            toggle: '',
+            closeIcon: 'fa-comment-o fa-flip-horizontal',
+            openIcon: 'fa-comment fa-flip-horizontal'
+        };
+    },
+
+    handleClick: function(event) {
+        var elm = document.getElementById(this.props.toggle);
+        var display = elm.style.display;
+
+        event.preventDefault();
+        elm.style.display = this.state.display;
+
+        this.setState({
+            symbolClass: display === 'none' ? this.props.closeIcon : this.props.openIcon,
+            display: display
+        });
+    },
+
+    render: function() {
+        return (
+            <a href='#' onClick={this.handleClick}><i className={"fa " + this.state.symbolClass + " fa-fw"}/></a>
         );
     }
 });

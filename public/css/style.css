@@ -134,3 +134,10 @@ footer {margin-top: 20px;}
         padding: 20px 10px;
         margin: 0;
     }
+        .line-comment .content .comment-body textarea {
+            color: #000;
+            width: 500px;
+            height: 175px;
+            display: block;
+            margin-bottom: 10px;
+        }
