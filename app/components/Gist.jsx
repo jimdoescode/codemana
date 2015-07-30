@@ -89,14 +89,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var self = this;
-
         return (
             <div className="container main">
             {
-                self.state.files.map(function(file) {
-                    return <File key={file.name} name={file.name} lines={file.parsedLines} comments={self.state.comments[file.name]}/>
-                })
+                this.state.files.map(function(file) {
+                    return <File key={file.name} name={file.name} lines={file.parsedLines} comments={this.state.comments[file.name]}/>
+                }.bind(this))
             }
             </div>
         );

@@ -88,7 +88,7 @@ var LineComments = React.createClass({
                         return (
                             <Comment key={comment.id} id={this.props.file+"-L"+this.props.number+"-C"+comment.id} user={comment.user} text={comment.body}/>
                         );
-                    })
+                    }.bind(this))
                 }
                 </td>
             </tr>
