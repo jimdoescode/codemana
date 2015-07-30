@@ -41,6 +41,19 @@ pre {
     text-decoration: none;
 }
 
+.button-primary {
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: #4383c1;
+    margin-right: 10px;
+}
+
+.button-error {
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: #ab4526;
+}
+
 footer {margin-top: 20px;}
 .fa-flask {color: #54b0ff;}
 .app-header nav .logo {
