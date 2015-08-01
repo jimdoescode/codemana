@@ -3,10 +3,8 @@ var Qwest = require("qwest");
 var Modal = require("react-modal");
 
 module.exports = React.createClass({
-    getInitialState: function() {
-        return {
-            origin: window.location.origin
-        };
+    getDefaultProps: function() {
+        return {origin: window.location.origin};
     },
 
     handleSubmit: function(event) {
@@ -14,7 +12,7 @@ module.exports = React.createClass({
 
         var gistId = event.target.children.namedItem("gistId").value.trim();
         if (gistId !== "")
-            window.location.href = window.location.origin + "/" + gistId;
+            window.location.href = this.props.origin + "/" + gistId;
     },
 
     render: function() {

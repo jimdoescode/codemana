@@ -21,11 +21,13 @@ var AppHeader = require("./AppHeader.jsx");
 var Gist = require("./Gist.jsx");
 var AppFooter = require("./AppFooter.jsx");
 
+var origin = window.location.origin;
+
 var GistPage = React.createClass({
     render: function() {
         return (
             <div className="app">
-                <AppHeader/>
+                <AppHeader origin={origin}/>
                 <Gist id={this.props.gistId}/>
                 <AppFooter/>
             </div>
