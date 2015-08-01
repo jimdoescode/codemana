@@ -6,6 +6,7 @@ module.exports = React.createClass({
             name: '',
             lines: [],
             comments: [],
+            onLineClick: function() {}
         };
     },
 
@@ -16,11 +17,11 @@ module.exports = React.createClass({
         for (var i=0; i < lineCount; i++) {
             var num = i + 1;
 
-            if (this.props.comments[i+1]) {
-                rows.push(<Line key={this.props.name + num} file={this.props.name} number={num} content={this.props.lines[i]} toggle={this.props.name+"-C"+(i + 1)}/>);
+            if (this.props.comments[i+1] && this.props.comments[i+1].length > 0) {
+                rows.push(<Line onClick={this.props.onLineClick} key={this.props.name + num} file={this.props.name} number={num} content={this.props.lines[i]} toggle={this.props.name+"-C"+(i + 1)}/>);
                 rows.push(<LineComments key={this.props.name + num + 'comments'} file={this.props.name} number={num} comments={this.props.comments[num]}/>);
             } else {
-                rows.push(<Line key={this.props.name + num} file={this.props.name} number={num} content={this.props.lines[i]}/>);
+                rows.push(<Line onClick={this.props.onLineClick} key={this.props.name + num} file={this.props.name} number={num} content={this.props.lines[i]}/>);
             }
         }
 
@@ -52,8 +53,14 @@ var Line = React.createClass({
             number: 0,
             content: '',
             file: '',
-            toggle: false
+            toggle: false,
+            onClick: function() {}
         }
+    },
+
+    //Lines only need to rerender when a new file is set.
+    shouldComponentUpdate: function(newProps, newState) {
+        return this.props.content !== newProps.content || this.props.file !== newProps.file;
     },
 
     render: function() {
@@ -62,7 +69,9 @@ var Line = React.createClass({
             <tr id={this.props.file+"-L"+this.props.number} className="line">
                 {toggleCol}
                 <td className="line-num">{this.props.number}</td>
-                <td className="line-content"><pre dangerouslySetInnerHTML={{__html: this.props.content}}/></td>
+                <td className="line-content" onClick={this.props.onClick.bind(null, this.props.file, this.props.number, 0)}>
+                    <pre dangerouslySetInnerHTML={{__html: this.props.content}}/>
+                </td>
             </tr>
         );
     }
@@ -78,19 +87,18 @@ var LineComments = React.createClass({
     },
 
     render: function() {
+        var comments = this.props.comments.map(function(comment) {
+            return comment.showForm ?
+                <CommentForm user={comment.user} text={comment.body} key="comment-form" /> :
+                <Comment     user={comment.user} text={comment.body} key={comment.id} id={this.props.file+"-L"+this.props.number+"-C"+comment.id}/>;
+
+        }, this);
+
         return (
             <tr id={this.props.file+"-C"+this.props.number} className="line comment-row">
                 <td/>
                 <td className="line-num"/>
-                <td>
-                {
-                    this.props.comments.map(function(comment) {
-                        return (
-                            <Comment key={comment.id} id={this.props.file+"-L"+this.props.number+"-C"+comment.id} user={comment.user} text={comment.body}/>
-                        );
-                    }.bind(this))
-                }
-                </td>
+                <td>{comments}</td>
             </tr>
         );
     }
@@ -103,6 +111,11 @@ var Comment = React.createClass({
             text: '',
             user: null
         };
+    },
+
+    //Comments only need to rerender when new text is set.
+    shouldComponentUpdate: function(newProps, newState) {
+        return this.props.text !== newProps.text;
     },
 
     render: function() {
@@ -136,7 +149,7 @@ var CommentForm = React.createClass({
                 <a className="avatar pull-left" href="#"><img src="" alt=""/></a>
                 <div className="pull-left content">
                     <form action="#" onSubmit={this.props.onSubmit} className="comment-body">
-                        <textarea name="comment-body" placeholder="Enter your comment...">{this.props.text}</textarea>
+                        <textarea name="comment-body" placeholder="Enter your comment..." defaultValue={this.props.text}/>
                         <button type="submit" className="pure-button button-primary">
                             <i className="fa fa-comment"/> Comment
                         </button>
