@@ -5,7 +5,7 @@ var Utils = require("./Utils.jsx");
 
 module.exports = React.createClass({
 
-    createComment: function(gistId, commentId, filename, lineNumber, commentBody, commentUser, replyTo, showForm = false) {
+    createComment: function(gistId, commentId, filename, lineNumber, commentBody, commentUser, replyTo, showForm) {
         return {
             gistId: gistId,
             id: commentId,
@@ -30,7 +30,7 @@ module.exports = React.createClass({
         var split = comment.body.match(/(\S+)\s(.*)/);
         var data = split[1].match(/http:\/\/codemana\.com\/(.*)#(.+)-L(\d+)/);
 
-        return data !== null ? this.createComment(data[1], comment.id, data[2], parseInt(data[3], 10), split[2], comment.user, 0) : null;
+        return data !== null ? this.createComment(data[1], comment.id, data[2], parseInt(data[3], 10), split[2], comment.user, 0, false) : null;
     },
 
     parseFile: function(file) {
