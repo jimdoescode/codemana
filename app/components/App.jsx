@@ -39,7 +39,7 @@ var HomePage = React.createClass({
     render: function() {
         return (
             <div className="app">
-                <AppHeader/>
+                <AppHeader origin={origin}/>
                 <div className="container main">
                     <section className="hero">
                         <p><i className="fa fa-flask fa-3x"/></p>
@@ -56,7 +56,7 @@ var NotFoundPage = React.createClass({
     render: function() {
         return (
             <div className="app">
-                <AppHeader/>
+                <AppHeader origin={origin}/>
                 <div className="container main">
 
                 </div>
