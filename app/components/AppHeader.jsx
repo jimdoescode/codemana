@@ -20,7 +20,7 @@ module.exports = React.createClass({
             <header className="app-header">
                 <nav className="pure-menu pure-menu-horizontal pure-menu-fixed">
                     <div className="container">
-                        <a className="pure-menu-heading pull-left logo" href={this.state.origin}>
+                        <a className="pure-menu-heading pull-left logo" href={this.props.origin}>
                             <span>CODE</span><i className="fa fa-flask"/><span>MANA</span>
                         </a>
 
