@@ -26,15 +26,9 @@ pre {
     padding-top: 0.5em;
     text-shadow: 0 -.1em .2em #000;
 }
-.app-header nav .pure-form {
-    margin-left: 3em;
-}
-.app-header nav .pure-form input[type="text"] {
-    padding: 0.3em 0.3em;
-}
-.app-header nav .pure-menu-link {
-    padding-top: 0;
-}
+.app-header nav .pure-form {margin-left: 3em;}
+.app-header nav .pure-form input[type="text"] {padding: 0.3em 0.3em;}
+.app-header nav .pure-menu-link {padding-top: 0;}
 .app-header nav .pure-menu-link:focus,
 .app-header nav .pure-menu-link:hover {
     background-color: transparent;
@@ -109,15 +103,15 @@ footer {margin-top: 20px;}
     max-width: 30px;
     overflow: hidden;
 }
-
 .pull-left {float: left;}
 .pull-right {float: right;}
-
+.line-comments :first-child {margin-top: 0;}
 .line-comment {
+    margin-top: 10px;
     width: 100%;
     padding: 0 5px;
     overflow: hidden;
-    cursor: default;
+    cursor: auto;
 }
     .line-comment .avatar {
         width: 48px;
@@ -133,7 +127,7 @@ footer {margin-top: 20px;}
         margin-left: 5px;
         border-radius: 3px;
         overflow: hidden;
-        max-width: 1050px;
+        max-width: 1030px;
     }
 
     .line-comment .content .comment-header {
@@ -153,4 +147,5 @@ footer {margin-top: 20px;}
             height: 175px;
             display: block;
             margin-bottom: 10px;
+            padding: 2px;
         }

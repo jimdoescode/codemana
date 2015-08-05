@@ -9,7 +9,7 @@ module.exports = React.createClass({
         return {
             gistId: gistId,
             id: commentId,
-            fileName: filename,
+            filename: filename,
             line: parseInt(lineNumber, 10),
             body: commentBody,
             user: commentUser,
@@ -43,8 +43,12 @@ module.exports = React.createClass({
             files: [],
             comments: [],
             openComment: null,
-            username: null,
-            password: null
+            user: {
+                login: 'jimdoescode',
+                avatar_url: 'https://avatars.githubusercontent.com/u/546125?v=3',
+                html_url: '#',
+                password: ''
+            }
         };
     },
 
@@ -65,15 +69,15 @@ module.exports = React.createClass({
             for (var i=0; i < commentCount; i++) {
                 var parsed = self.parseComment(comments[i]);
 
-                if (parsedComments[parsed.fileName] === undefined) {
-                    parsedComments[parsed.fileName] = [];
+                if (parsedComments[parsed.filename] === undefined) {
+                    parsedComments[parsed.filename] = [];
                 }
 
-                if (parsedComments[parsed.fileName][parsed.line] === undefined) {
-                    parsedComments[parsed.fileName][parsed.line] = [];
+                if (parsedComments[parsed.filename][parsed.line] === undefined) {
+                    parsedComments[parsed.filename][parsed.line] = [];
                 }
 
-                parsedComments[parsed.fileName][parsed.line].push(parsed);
+                parsedComments[parsed.filename][parsed.line].push(parsed);
             }
 
             if (self.isMounted()) {
@@ -84,19 +88,34 @@ module.exports = React.createClass({
         });
     },
 
-    postGistComment: function(text) {
-
-    },
-
-    handleLineClick: function(filename, line, replyTo, event) {
+    postGistComment: function(event) {
+        var text = event.target.children.namedItem("text").value.trim();
         var comments = this.state.comments;
         var open = this.state.openComment;
-        var newOpen = this.createComment(this.props.id, 0, filename, line, 'test', null, replyTo, true);
+
+        event.preventDefault();
+
+        if (text !== "" && open !== null) {
+            open.body = text;
+            open.showForm = false;
+            comments[open.filename][open.line].splice(open.replyTo, 1, open);
+
+            this.setState({
+                comments: comments,
+                openComment: null
+            });
+        }
+    },
+
+    insertCommentForm: function(filename, line, replyTo, event) {
+        var comments = this.state.comments;
+        var open = this.state.openComment;
+        var newOpen = this.createComment(this.props.id, 0, filename, line, '', this.state.user, replyTo, true);
 
         event.preventDefault();
 
         if (open !== null)
-            comments[open.fileName][open.line].splice(open.replyTo, 1);
+            comments[open.filename][open.line].splice(open.replyTo, 1);
 
         if (!comments[filename])
             comments[filename] = [];
@@ -104,10 +123,12 @@ module.exports = React.createClass({
         if (!comments[filename][line])
             comments[filename][line] = [];
 
-        if (open === null || open.fileName !== newOpen.fileName || open.line !== newOpen.line || open.replyTo !== newOpen.replyTo)
+        if (open === null || open.filename !== newOpen.filename || open.line !== newOpen.line || open.replyTo !== newOpen.replyTo) {
+            newOpen.id = comments[filename][line].length;
             comments[filename][line].splice(replyTo, 0, newOpen);
-        else
+        } else {
             newOpen = null;
+        }
 
         this.setState({
             comments: comments,
@@ -115,12 +136,33 @@ module.exports = React.createClass({
         });
     },
 
+    removeCommentForm: function(event) {
+        var comments = this.state.comments;
+        var open = this.state.openComment;
+
+        event.preventDefault();
+
+        if (open !== null) {
+            comments[open.filename][open.line].splice(open.replyTo, 1);
+            this.setState({
+                comments: comments,
+                openComment: null
+            });
+        }
+    },
+
     render: function() {
         return (
             <div className="container main">
             {
                 this.state.files.map(function(file) {
-                    return <File onLineClick={this.handleLineClick} key={file.name} name={file.name} lines={file.parsedLines} comments={this.state.comments[file.name]}/>
+                    return <File onCommentFormOpen={this.insertCommentForm}
+                                 onCommentFormCancel={this.removeCommentForm}
+                                 onCommentFormSubmit={this.postGistComment}
+                                 key={file.name}
+                                 name={file.name}
+                                 lines={file.parsedLines}
+                                 comments={this.state.comments[file.name]}/>
                 }, this)
             }
             </div>

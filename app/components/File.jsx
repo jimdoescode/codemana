@@ -6,7 +6,9 @@ module.exports = React.createClass({
             name: '',
             lines: [],
             comments: [],
-            onLineClick: function() {}
+            onCommentFormOpen: function() {},
+            onCommentFormCancel: function() {},
+            onCommentFormSubmit: function() {}
         };
     },
 
@@ -17,11 +19,26 @@ module.exports = React.createClass({
         for (var i=0; i < lineCount; i++) {
             var num = i + 1;
 
-            if (this.props.comments[i+1] && this.props.comments[i+1].length > 0) {
-                rows.push(<Line onClick={this.props.onLineClick} key={this.props.name + num} file={this.props.name} number={num} content={this.props.lines[i]} toggle={this.props.name+"-C"+(i + 1)}/>);
-                rows.push(<LineComments key={this.props.name + num + 'comments'} file={this.props.name} number={num} comments={this.props.comments[num]}/>);
+            if (this.props.comments[num] && this.props.comments[num].length > 0) {
+                rows.push(<Line key={this.props.name + num}
+                                onClick={this.props.onCommentFormOpen}
+                                file={this.props.name}
+                                number={num}
+                                content={this.props.lines[i]}
+                                toggle={LineComments.generateNodeId(this.props.name, num)}/>);
+                rows.push(<LineComments key={this.props.name + num + 'comments'}
+                                        onEditOrReply={this.props.onCommentFormOpen}
+                                        onCancel={this.props.onCommentFormCancel}
+                                        onSubmit={this.props.onCommentFormSubmit}
+                                        file={this.props.name}
+                                        number={num}
+                                        comments={this.props.comments[num]}/>);
             } else {
-                rows.push(<Line onClick={this.props.onLineClick} key={this.props.name + num} file={this.props.name} number={num} content={this.props.lines[i]}/>);
+                rows.push(<Line key={this.props.name + num}
+                                onClick={this.props.onCommentFormOpen}
+                                file={this.props.name}
+                                number={num}
+                                content={this.props.lines[i]}/>);
             }
         }
 
@@ -78,27 +95,36 @@ var Line = React.createClass({
 });
 
 var LineComments = React.createClass({
+    statics: {
+        generateNodeId: function(filename, number) {
+            return filename + "-C" + number;
+        }
+    },
+
     getDefaultProps: function() {
         return {
             number: 0,
             file: '',
-            comments: []
+            comments: [],
+            onEditOrReply: function() {},
+            onCancel: function() {},
+            onSubmit: function() {}
         }
     },
 
     render: function() {
         var comments = this.props.comments.map(function(comment) {
             return comment.showForm ?
-                <CommentForm user={comment.user} text={comment.body} key="comment-form" /> :
-                <Comment     user={comment.user} text={comment.body} key={comment.id} id={this.props.file+"-L"+this.props.number+"-C"+comment.id}/>;
+                <CommentForm user={comment.user} text={comment.body} key="comment-form" onCancel={this.props.onCancel} onSubmit={this.props.onSubmit}/> :
+                <Comment     user={comment.user} text={comment.body} key={comment.id} onEditOrReply={this.props.onEditOrReply} id={this.props.file+"-L"+this.props.number+"-C"+comment.id}/>;
 
         }, this);
 
         return (
-            <tr id={this.props.file+"-C"+this.props.number} className="line comment-row">
+            <tr id={LineComments.generateNodeId(this.props.file, this.props.number)} className="line comment-row">
                 <td/>
                 <td className="line-num"/>
-                <td>{comments}</td>
+                <td className="line-comments">{comments}</td>
             </tr>
         );
     }
@@ -109,7 +135,8 @@ var Comment = React.createClass({
         return {
             id: '',
             text: '',
-            user: null
+            user: null,
+            onEditOrReply: function() {}
         };
     },
 
@@ -146,10 +173,13 @@ var CommentForm = React.createClass({
     render: function() {
         return (
             <div className="line-comment">
-                <a className="avatar pull-left" href="#"><img src="" alt=""/></a>
+                <a className="avatar pull-left" href={this.props.user.html_url}><img src={this.props.user.avatar_url} alt=""/></a>
                 <div className="pull-left content">
+                    <header className="comment-header">
+                        <a href={this.props.user.html_url}>{this.props.user.login}</a>
+                    </header>
                     <form action="#" onSubmit={this.props.onSubmit} className="comment-body">
-                        <textarea name="comment-body" placeholder="Enter your comment..." defaultValue={this.props.text}/>
+                        <textarea name="text" placeholder="Enter your comment..." defaultValue={this.props.text}/>
                         <button type="submit" className="pure-button button-primary">
                             <i className="fa fa-comment"/> Comment
                         </button>
