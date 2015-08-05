@@ -4,7 +4,7 @@ a, .pure-menu-link, .pure-menu-heading {
     color: #ce6849;
     text-decoration: none;
 }
-a:hover, a:focus {
+a:hover {
     color: #ab4526;
     text-decoration: underline;
 }
@@ -68,14 +68,14 @@ footer {margin-top: 20px;}
     font-size: 32pt;
     color: #eee;
     text-align: center;
-    border-radius: 3px;
+    border-radius: .5em;
 }
 .container {
     width: 1140px;
     margin: auto;
 }
 .code-file-container {
-    border-radius: 3px;
+    border-radius: .5em;
     margin-top: 20px;
     max-width: 1140px;
     overflow: scroll;
@@ -88,12 +88,11 @@ footer {margin-top: 20px;}
         min-height: 10px;
         background-color: #121415;
         color: #eee;
-        cursor: pointer;
     }
-        .code-file .line pre {
+        .code-file .line .line-content {
             padding: 2px 0 4px 5px;
-            vertical-align: top;
             overflow: hidden;
+            cursor: pointer;
         }
 
 .line-num {
@@ -102,6 +101,7 @@ footer {margin-top: 20px;}
     background-color: #282a2b;
     max-width: 30px;
     overflow: hidden;
+    cursor: default;
 }
 .pull-left {float: left;}
 .pull-right {float: right;}
@@ -120,20 +120,20 @@ footer {margin-top: 20px;}
         .line-comment .avatar img {
             width: 100%;
             height: 100%;
-            border-radius: 3px;
+            border-radius: .25em;
         }
 
     .line-comment .content {
         margin-left: 5px;
-        border-radius: 3px;
+        border-radius: .25em;
         overflow: hidden;
-        max-width: 1030px;
+        max-width: 800px;
     }
 
     .line-comment .content .comment-header {
         background-color: #282a2b;
         padding: 10px;
-        overflow: hidden
+        overflow: hidden;
     }
 
     .line-comment .content .comment-body {
@@ -143,7 +143,7 @@ footer {margin-top: 20px;}
     }
         .line-comment .content .comment-body textarea {
             color: #000;
-            width: 500px;
+            width: 770px;
             height: 175px;
             display: block;
             margin-bottom: 10px;

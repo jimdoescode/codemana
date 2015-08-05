@@ -108,6 +108,8 @@ module.exports = React.createClass({
     },
 
     insertCommentForm: function(filename, line, replyTo, event) {
+        //TODO We need to check if they are logged in and require login before being able to add comments
+
         var comments = this.state.comments;
         var open = this.state.openComment;
         var newOpen = this.createComment(this.props.id, 0, filename, line, '', this.state.user, replyTo, true);

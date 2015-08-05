@@ -55,7 +55,9 @@ module.exports = React.createClass({
                         <tr className="spacer line">
                             <td/>
                             <td className="line-num"/>
-                            <td className="line-content"><pre/></td>
+                            <td className="line-content">
+                                <pre/>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -77,7 +79,9 @@ var Line = React.createClass({
 
     //Lines only need to rerender when a new file is set.
     shouldComponentUpdate: function(newProps, newState) {
-        return this.props.content !== newProps.content || this.props.file !== newProps.file;
+        return this.props.content !== newProps.content ||
+               this.props.file !== newProps.file ||
+               this.props.toggle !== newProps.toggle;
     },
 
     render: function() {
@@ -224,7 +228,9 @@ var CommentToggle = React.createClass({
 
     render: function() {
         return (
-            <a href='#' onClick={this.handleClick}><i className={"fa " + this.state.symbolClass + " fa-fw"}/></a>
+            <a href='#' onClick={this.handleClick}>
+                <i className={"fa " + this.state.symbolClass + " fa-fw"}/>
+            </a>
         );
     }
 });
