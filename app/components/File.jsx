@@ -47,17 +47,15 @@ module.exports = React.createClass({
                 <table id={this.props.name} className="code-file">
                     <tbody>
                         <tr className="spacer line">
-                            <td/>
+                            <td className="line-marker"/>
                             <td className="line-num"/>
-                            <td className="line-content"><pre/></td>
+                            <td className="line-content"/>
                         </tr>
                         {rows}
                         <tr className="spacer line">
-                            <td/>
+                            <td className="line-marker"/>
                             <td className="line-num"/>
-                            <td className="line-content">
-                                <pre/>
-                            </td>
+                            <td className="line-content"/>
                         </tr>
                     </tbody>
                 </table>
@@ -85,13 +83,15 @@ var Line = React.createClass({
     },
 
     render: function() {
-        var toggleCol = this.props.toggle ? <td><CommentToggle toggle={this.props.toggle}/></td> : <td/>
+        var toggleCol = this.props.toggle ? <td className="line-marker"><CommentToggle toggle={this.props.toggle}/></td> : <td className="line-marker"/>
         return (
             <tr id={this.props.file+"-L"+this.props.number} className="line">
                 {toggleCol}
                 <td className="line-num">{this.props.number}</td>
                 <td className="line-content" onClick={this.props.onClick.bind(null, this.props.file, this.props.number, 0)}>
-                    <pre dangerouslySetInnerHTML={{__html: this.props.content}}/>
+                    <pre>
+                        <code dangerouslySetInnerHTML={{__html: this.props.content}}/>
+                    </pre>
                 </td>
             </tr>
         );
@@ -126,7 +126,7 @@ var LineComments = React.createClass({
 
         return (
             <tr id={LineComments.generateNodeId(this.props.file, this.props.number)} className="line comment-row">
-                <td/>
+                <td className="line-marker"/>
                 <td className="line-num"/>
                 <td className="line-comments">{comments}</td>
             </tr>
