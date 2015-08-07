@@ -17,7 +17,12 @@ pre {
     border-radius: inherit;
     color: inherit;
     font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    text-shadow: 0 -.1em .2em #000;
+    overflow: hidden;
 }
+code {padding: 2px 0 4px 5px;}
+pre::selection, pre ::selection {text-shadow: none;}
+pre::-moz-selection, pre ::-moz-selection {text-shadow: none;}
 .app-header nav {
     border-bottom: 1px solid #000;
     background-color: #282a2b;
@@ -79,35 +84,30 @@ footer {margin-top: 20px;}
     margin-top: 20px;
     max-width: 1140px;
     overflow: scroll;
-    text-shadow: 0 -.1em .2em #000;
 }
 
 .code-file {width: 100%;}
-    .code-file .spacer {height: 3px;}
-    .code-file .line {
-        min-height: 10px;
-        background-color: #121415;
-        color: #eee;
-    }
+    .code-file .spacer {height: 5px;}
+    .code-file .line {min-height: 10px;}
         .code-file .line .line-content {
-            padding: 2px 0 4px 5px;
             overflow: hidden;
             cursor: pointer;
         }
 
 .line-num {
-    padding: 1px 5px;
+    padding: 3px 7px 0;
     text-align: right;
-    background-color: #282a2b;
-    max-width: 30px;
+    max-width: 35px;
     overflow: hidden;
     cursor: default;
+    font-size: 10pt;
 }
 .pull-left {float: left;}
 .pull-right {float: right;}
+.line-comments {padding: 5px 0;}
 .line-comments :first-child {margin-top: 0;}
 .line-comment {
-    margin-top: 10px;
+    margin-top: 5px;
     width: 100%;
     padding: 0 5px;
     overflow: hidden;
@@ -131,15 +131,16 @@ footer {margin-top: 20px;}
     }
 
     .line-comment .content .comment-header {
-        background-color: #282a2b;
         padding: 10px;
         overflow: hidden;
+        background-color: #282a2b;
     }
 
     .line-comment .content .comment-body {
-        background-color: #37393a;
+        color: #eee;
         padding: 20px 10px;
         margin: 0;
+        background-color: #37393a;
     }
         .line-comment .content .comment-body textarea {
             color: #000;

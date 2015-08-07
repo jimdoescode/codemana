@@ -1,18 +1,21 @@
 var React = require("react");
-var Qwest = require("qwest");
-var Modal = require("react-modal");
 
 module.exports = React.createClass({
     getDefaultProps: function() {
         return {origin: window.location.origin};
     },
 
-    handleSubmit: function(event) {
+    gistRedirect: function(event) {
         event.preventDefault();
 
         var gistId = event.target.children.namedItem("gistId").value.trim();
         if (gistId !== "")
             window.location.href = this.props.origin + "/" + gistId;
+    },
+
+    updateStyle: function(event) {
+        event.preventDefault();
+        document.getElementById('highlight-style').href = event.target.value;
     },
 
     render: function() {
@@ -24,13 +27,22 @@ module.exports = React.createClass({
                             <span>CODE</span><i className="fa fa-flask"/><span>MANA</span>
                         </a>
 
-                        <form className="pure-form pull-left pure-u-2-3" onSubmit={this.handleSubmit} action="#">
+                        <form className="pure-form pull-left pure-u-2-3" onSubmit={this.gistRedirect} action="#">
                             <input className="pure-input-1-3" name="gistId" type="text" placeholder="Enter a Gist ID..." required="true"/>
                         </form>
 
                         <ul className="pure-menu-list pull-right">
+                            {/*
                             <li className="pure-menu-item">
                                 <a className="pure-menu-link" href="#"><i className="fa fa-github-square"/> GitHub Login</a>
+                            </li>
+                            */}
+                            <li className="pure-menu-item">
+                                <select onChange={this.updateStyle}>
+                                    <option value="css/default.css">Default Highlighting</option>
+                                    <option value="css/funky.css">Funky Highlighting</option>
+                                    <option value="css/okaidia.css">Okaidia Highlighting</option>
+                                </select>
                             </li>
                         </ul>
                     </div>
@@ -38,21 +50,4 @@ module.exports = React.createClass({
             </header>
         );
     }
-});
-
-var LoginModal = React.createClass({
-
-    login: function() {
-        Qwest.get('https://api.github.com/users/:username', {
-            user: ':username',
-            password: ''
-        })
-    },
-
-    render: function() {
-        return (
-            <div/>
-        );
-    }
-
 });
