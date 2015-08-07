@@ -22,7 +22,7 @@
     "build-dev": "node_modules/.bin/browserify -t reactify app/components/*.jsx -o js/script.js",
     "build-prod": "node_modules/.bin/browserify -t reactify app/components/*.jsx | node_modules/.bin/uglifyjs > js/script.min.js",
     "watch": "node_modules/.bin/watchify -t reactify app/components/*.jsx -o js/script.js",
-    "clean-js": "rm js/*.js"
+    "clean-js": "rm js/script.js"
   },
   "author": "Jim Saunders",
   "license": "MIT"
