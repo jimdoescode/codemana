@@ -1,10 +1,8 @@
-/* http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clike+javascript+c+csharp+cpp+go+java+objectivec+php+php-extras+ruby */
 /**
  * prism.js Twilight theme
  * Based (more or less) on the Twilight theme originally of Textmate fame.
  * @author Remy Bach
  */
-
 .line {
     background-color: #121415;
     color: hsl(0, 0%, 93%);

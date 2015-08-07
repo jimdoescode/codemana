@@ -1,3 +1,8 @@
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
 .line {
     background-color: #272822;
     color: #f8f8f2;
