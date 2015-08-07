@@ -42,6 +42,7 @@ module.exports = React.createClass({
                                     <option value="css/default.css">Default Highlighting</option>
                                     <option value="css/funky.css">Funky Highlighting</option>
                                     <option value="css/okaidia.css">Okaidia Highlighting</option>
+                                    <option value="css/dark.css">Dark Highlighting</option>
                                 </select>
                             </li>
                         </ul>
