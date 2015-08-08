@@ -184,13 +184,13 @@ module.exports = React.createClass({
             <div className="container main">
                 <Modal isOpen={this.state.showLoginModal} onRequestClose={this.closeLoginModal} className="react-modal-content" overlayClassName="react-modal-overlay">
                     <h2><i className="fa fa-github"/> GitHub Access</h2>
-                    <p>You need to enter your GitHub user name and password. This is only used to post Gist comments.</p>
+                    <p>You need to enter your GitHub user name and password. This is <strong>only</strong> used to post Gist comments.</p>
                     <p>If you prefer not to enter your password you can use a <a href="https://github.com/settings/tokens/new">personal access token</a>. Make sure it has Gist access.</p>
                     <hr/>
                     <form className="pure-form pure-form-stacked" onSubmit={this.handleLogin}>
                         <fieldset>
                             <input className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
-                            <input className="pure-input-1" type="password" placeholder="Password or OAuth Token..."/>
+                            <input className="pure-input-1" type="password" placeholder="Password or Token..."/>
                         </fieldset>
                         <fieldset>
                             <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
