@@ -80,7 +80,7 @@ footer {margin-top: 20px;}
     margin: auto;
 }
 .code-file-container {
-    border-radius: .5em;
+    border-radius: 0.5em;
     margin-top: 20px;
     max-width: 1140px;
     overflow: scroll;
@@ -150,3 +150,27 @@ footer {margin-top: 20px;}
             margin-bottom: 10px;
             padding: 2px;
         }
+
+/* Special React Modal Styles */
+.react-modal-overlay {
+    z-index: 100;
+    background-color: rgba(55, 57, 58, 0.75) !important;
+}
+
+.react-modal-content {
+    background-color: #282a2b !important;
+    width: 300px;
+    height: 390px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 100px !important;
+    color: #eee;
+    border-color: #000 !important;
+    border-radius: 0.5em !important;
+}
+    .react-modal-content input {
+        margin-bottom: 10px !important;
+        color: #000;
+    }

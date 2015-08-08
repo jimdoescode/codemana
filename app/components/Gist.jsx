@@ -1,7 +1,11 @@
 var React = require("react");
 var Qwest = require("qwest");
+var Modal = require("react-modal");
 var File = require("./File.jsx");
 var Utils = require("./Utils.jsx");
+
+Modal.setAppElement(document.getElementById("mount-point"));
+Modal.injectCSS();
 
 module.exports = React.createClass({
 
@@ -25,6 +29,10 @@ module.exports = React.createClass({
         };
     },
 
+    createCommentLink: function(filename, lineNumber) {
+        return 'http://codemana.com/'+this.props.id+'#'+filename+'-L'+lineNumber;
+    },
+
     parseComment: function(comment) {
         //Annoyingly I couldn't get a single regex to separate everything out...
         var split = comment.body.match(/(\S+)\s(.*)/);
@@ -43,12 +51,14 @@ module.exports = React.createClass({
             files: [],
             comments: [],
             openComment: null,
-            user: {
+            showLoginModal: false,
+            user: null
+            /*user: {
                 login: 'jimdoescode',
                 avatar_url: 'https://avatars.githubusercontent.com/u/546125?v=3',
                 html_url: '#',
                 password: ''
-            }
+            }*/
         };
     },
 
@@ -108,11 +118,14 @@ module.exports = React.createClass({
     },
 
     insertCommentForm: function(filename, line, replyTo, event) {
-        //TODO We need to check if they are logged in and require login before being able to add comments
-
         var comments = this.state.comments;
         var open = this.state.openComment;
         var newOpen = this.createComment(this.props.id, 0, filename, line, '', this.state.user, replyTo, true);
+
+        if (this.state.user === null) {
+            this.openLoginModal();
+            return;
+        }
 
         event.preventDefault();
 
@@ -153,20 +166,49 @@ module.exports = React.createClass({
         }
     },
 
+    openLoginModal: function() {
+        this.setState({showLoginModal: true});
+    },
+
+    closeLoginModal: function(event) {
+        event.preventDefault();
+        this.setState({showLoginModal: false});
+    },
+
+    handleLogin: function(event) {
+
+    },
+
     render: function() {
         return (
             <div className="container main">
-            {
-                this.state.files.map(function(file) {
-                    return <File onCommentFormOpen={this.insertCommentForm}
-                                 onCommentFormCancel={this.removeCommentForm}
-                                 onCommentFormSubmit={this.postGistComment}
-                                 key={file.name}
-                                 name={file.name}
-                                 lines={file.parsedLines}
-                                 comments={this.state.comments[file.name]}/>
-                }, this)
-            }
+                <Modal isOpen={this.state.showLoginModal} onRequestClose={this.closeLoginModal} className="react-modal-content" overlayClassName="react-modal-overlay">
+                    <h2><i className="fa fa-github"/> GitHub Access</h2>
+                    <p>You need to enter your GitHub user name and password. This is only used to post Gist comments.</p>
+                    <p>If you prefer not to enter your password you can use a <a href="https://github.com/settings/tokens/new">personal access token</a>. Make sure it has Gist access.</p>
+                    <hr/>
+                    <form className="pure-form pure-form-stacked" onSubmit={this.handleLogin}>
+                        <fieldset>
+                            <input className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
+                            <input className="pure-input-1" type="password" placeholder="Password or OAuth Token..."/>
+                        </fieldset>
+                        <fieldset>
+                            <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
+                            <button className="pure-button button-error" onClick={this.closeLoginModal}><i className="fa fa-times-circle"/> Cancel</button>
+                        </fieldset>
+                    </form>
+                </Modal>
+                {
+                    this.state.files.map(function(file) {
+                        return <File onCommentFormOpen={this.insertCommentForm}
+                                     onCommentFormCancel={this.removeCommentForm}
+                                     onCommentFormSubmit={this.postGistComment}
+                                     key={file.name}
+                                     name={file.name}
+                                     lines={file.parsedLines}
+                                     comments={this.state.comments[file.name]}/>
+                    }, this)
+                }
             </div>
         );
     }
