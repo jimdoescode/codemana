@@ -167,7 +167,7 @@ footer {margin-top: 20px;}
     right: 0;
     top: 100px !important;
     color: #eee;
-    border-color: #000 !important;
+    border: 5px solid #000 !important;
     border-radius: 0.5em !important;
 }
     .react-modal-content input {
