@@ -6,6 +6,7 @@ var Utils = require("./Utils.jsx");
 
 Modal.setAppElement(document.getElementById("mount-point"));
 Modal.injectCSS();
+Qwest.base = 'https://api.github.com';
 
 module.exports = React.createClass({
 
@@ -33,6 +34,16 @@ module.exports = React.createClass({
         return 'http://codemana.com/'+this.props.id+'#'+filename+'-L'+lineNumber;
     },
 
+    getHeaders: function() {
+        var headers = {};
+
+        if (this.state.user !== null) {
+            headers["Authorization"] = 'Basic '+btoa(this.state.user.login+':'+this.state.user.password);
+        }
+
+        return headers;
+    },
+
     parseComment: function(comment) {
         //Annoyingly I couldn't get a single regex to separate everything out...
         var split = comment.body.match(/(\S+)\s(.*)/);
@@ -53,18 +64,17 @@ module.exports = React.createClass({
             openComment: null,
             showLoginModal: false,
             user: null
-            /*user: {
-                login: 'jimdoescode',
-                avatar_url: 'https://avatars.githubusercontent.com/u/546125?v=3',
-                html_url: '#',
-                password: ''
-            }*/
         };
     },
 
     componentDidMount: function() {
         var self = this;
-        Qwest.get('https://api.github.com/gists/'+self.props.id).then(function(xhr, gist) {
+        var options = {
+            headers: this.getHeaders(),
+            responseType: 'json'
+        };
+
+        Qwest.get('/gists/'+self.props.id, null, options).then(function(xhr, gist) {
             var files = [];
             for (var name in gist.files)
                 files.push(self.parseFile(gist.files[name]));
@@ -73,19 +83,17 @@ module.exports = React.createClass({
                 self.setState({files: files});
         });
 
-        Qwest.get('https://api.github.com/gists/'+self.props.id+'/comments').then(function(xhr, comments) {
+        Qwest.get('/gists/'+self.props.id+'/comments', null, options).then(function(xhr, comments) {
             var parsedComments = {};
             var commentCount = comments.length;
             for (var i=0; i < commentCount; i++) {
                 var parsed = self.parseComment(comments[i]);
 
-                if (parsedComments[parsed.filename] === undefined) {
+                if (parsedComments[parsed.filename] === undefined)
                     parsedComments[parsed.filename] = [];
-                }
 
-                if (parsedComments[parsed.filename][parsed.line] === undefined) {
+                if (parsedComments[parsed.filename][parsed.line] === undefined)
                     parsedComments[parsed.filename][parsed.line] = [];
-                }
 
                 parsedComments[parsed.filename][parsed.line].push(parsed);
             }
@@ -123,7 +131,7 @@ module.exports = React.createClass({
         var newOpen = this.createComment(this.props.id, 0, filename, line, '', this.state.user, replyTo, true);
 
         if (this.state.user === null) {
-            this.openLoginModal();
+            this.setState({showLoginModal: true});
             return;
         }
 
@@ -166,38 +174,22 @@ module.exports = React.createClass({
         }
     },
 
-    openLoginModal: function() {
-        this.setState({showLoginModal: true});
+    handleLogin: function(user) {
+        this.setState({
+            user: user,
+            showLoginModal: false
+        });
     },
 
-    closeLoginModal: function(event) {
+    closeModal: function(event) {
         event.preventDefault();
         this.setState({showLoginModal: false});
-    },
-
-    handleLogin: function(event) {
-
     },
 
     render: function() {
         return (
             <div className="container main">
-                <Modal isOpen={this.state.showLoginModal} onRequestClose={this.closeLoginModal} className="react-modal-content" overlayClassName="react-modal-overlay">
-                    <h2><i className="fa fa-github"/> GitHub Access</h2>
-                    <p>You need to enter your GitHub user name and GitHub password. This is <strong>only</strong> used to post Gist comments to GitHub.</p>
-                    <p>If you prefer not to enter your password you can use a <a href="https://github.com/settings/tokens/new">personal access token</a>. Make sure it has Gist access.</p>
-                    <hr/>
-                    <form className="pure-form pure-form-stacked" onSubmit={this.handleLogin}>
-                        <fieldset>
-                            <input className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
-                            <input className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
-                        </fieldset>
-                        <fieldset>
-                            <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
-                            <button className="pure-button button-error" onClick={this.closeLoginModal}><i className="fa fa-times-circle"/> Cancel</button>
-                        </fieldset>
-                    </form>
-                </Modal>
+                <LoginModal show={this.state.showLoginModal} onSuccess={this.handleLogin} onClose={this.closeModal}/>
                 {
                     this.state.files.map(function(file) {
                         return <File onCommentFormOpen={this.insertCommentForm}
@@ -210,6 +202,82 @@ module.exports = React.createClass({
                     }, this)
                 }
             </div>
+        );
+    }
+});
+
+var LoginModal = React.createClass({
+
+    getDefaultProps: function() {
+        return {
+            show: false,
+            onSuccess: function(user) {},
+            onClose: function() {}
+        };
+    },
+
+    getInitialState: function() {
+        return {
+            processing: false
+        };
+    },
+
+    attemptLogin: function(event) {
+        var username = event.target.elements.namedItem("username").value.trim();
+        var password = event.target.elements.namedItem("password").value;
+        var self = this;
+
+        event.preventDefault();
+
+        if (username && password) {
+
+            var options = {
+                headers: {
+                    Authorization: 'Basic ' + btoa(username + ':' + password)
+                },
+                responseType: 'json'
+            };
+
+            this.setState({processing: true});
+            Qwest.get('/user', null, options).then(function(xhr, user) {
+
+                user.password = password;
+                self.props.onSuccess(user);
+
+            }).complete(function(xhr, user) {
+
+                self.setState({processing: false});
+
+            });
+        }
+    },
+
+    render: function() {
+        var form = (
+            <form className="pure-form pure-form-stacked" onSubmit={this.attemptLogin}>
+                <fieldset>
+                    <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
+                    <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
+                </fieldset>
+                <fieldset>
+                    <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
+                    <button className="pure-button button-error" onClick={this.props.onClose}><i className="fa fa-times-circle"/> Cancel</button>
+                </fieldset>
+            </form>
+        );
+
+        var spinner = (
+            <p>Processing...</p>
+        );
+
+        return (
+            <Modal isOpen={this.props.show} onRequestClose={this.props.onClose} className="react-modal-content" overlayClassName="react-modal-overlay">
+                <h2><i className="fa fa-github"/> GitHub Access</h2>
+                <p>You need to enter your GitHub user name and GitHub password. This is <strong>only</strong> used to post Gist comments to GitHub.</p>
+                <p>If you prefer not to enter your password you can use a <a href="https://github.com/settings/tokens/new">personal access token</a>. Make sure it has Gist access.</p>
+                <hr/>
+                { this.state.processing ? spinner : form }
+            </Modal>
         );
     }
 });
