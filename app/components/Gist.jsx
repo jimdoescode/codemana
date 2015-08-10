@@ -110,6 +110,11 @@ module.exports = React.createClass({
         var text = event.target.children.namedItem("text").value.trim();
         var comments = this.state.comments;
         var open = this.state.openComment;
+        var options = {
+            headers: this.getHeaders(),
+            dataType: 'json',
+            responseType: 'json'
+        };
 
         event.preventDefault();
 
@@ -117,6 +122,9 @@ module.exports = React.createClass({
             open.body = text;
             open.showForm = false;
             comments[open.filename][open.line].splice(open.replyTo, 1, open);
+
+            //Send the comment to GitHub. We only need to handle the case where it doesn't make it
+            Qwest.post('/gists/'+this.props.id+'/comments', {body: this.createCommentLink(open.filename, open.line) + ' ' + text}, options);
 
             this.setState({
                 comments: comments,
