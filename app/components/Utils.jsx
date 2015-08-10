@@ -60,5 +60,13 @@ module.exports = {
         }
 
         return lines;
+    },
+
+    getUserFromStorage: function(store) {
+        return JSON.parse(store.getItem('user'));;
+    },
+
+    saveUserToStorage: function(user, store) {
+        store.setItem('user', JSON.stringify(user));
     }
 };

@@ -63,7 +63,7 @@ module.exports = React.createClass({
             comments: [],
             openComment: null,
             showLoginModal: false,
-            user: null
+            user: Utils.getUserFromStorage(sessionStorage)
         };
     },
 
@@ -233,6 +233,7 @@ var LoginModal = React.createClass({
     attemptLogin: function(event) {
         var username = event.target.elements.namedItem("username").value.trim();
         var password = event.target.elements.namedItem("password").value;
+        var store = event.target.elements.namedItem("store").checked;
         var self = this;
 
         event.preventDefault();
@@ -250,6 +251,10 @@ var LoginModal = React.createClass({
             Qwest.get('/user', null, options).then(function(xhr, user) {
 
                 user.password = password;
+
+                if (store)
+                    Utils.saveUserToStorage(user, sessionStorage);
+
                 self.props.onSuccess(user);
 
             }).complete(function(xhr, user) {
@@ -266,6 +271,7 @@ var LoginModal = React.createClass({
                 <fieldset>
                     <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
                     <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
+                    <label><input name="store" type="checkbox"/> Store in Memory</label>
                 </fieldset>
                 <fieldset>
                     <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
