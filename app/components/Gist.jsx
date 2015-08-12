@@ -269,8 +269,8 @@ var LoginModal = React.createClass({
         var form = (
             <form className="pure-form pure-form-stacked" onSubmit={this.attemptLogin}>
                 <fieldset>
-                    <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
-                    <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
+                    <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..." required="true"/>
+                    <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..." required="true"/>
                     <label><input name="store" type="checkbox"/> Store in Memory</label>
                 </fieldset>
                 <fieldset>
@@ -281,7 +281,7 @@ var LoginModal = React.createClass({
         );
 
         var spinner = (
-            <p>Processing...</p>
+            <p style={{textAlign: 'center'}}><i className="fa fa-github-alt fa-spin fa-5x"/></p>
         );
 
         return (
