@@ -20,24 +20,27 @@ module.exports = {
     },
 
     tokenize: function(code, lang) {
-        var tokens = Prism.tokenize(code, Prism.languages[lang]);
         var processed = [];
-        var token = tokens.shift();
 
-        while (token)
-        {
-            var isObj = typeof token === 'object';
-            var lines = this.tokenizeNewLines(isObj ? token.content : token);
-            var count = lines.length;
-            for (var i=0; i < count; i++)
+        if (Prism.languages[lang]) {
+            var tokens = Prism.tokenize(code, Prism.languages[lang]);
+            var token = tokens.shift();
+
+            while (token)
             {
-                if (isObj)
-                    processed.push(new Prism.Token(token.type, Prism.util.encode(lines[i]), token.alias));
-                else
-                    processed.push(Prism.util.encode(lines[i]));
-            }
+                var isObj = typeof token === 'object';
+                var lines = this.tokenizeNewLines(isObj ? token.content : token);
+                var count = lines.length;
+                for (var i=0; i < count; i++)
+                {
+                    if (isObj)
+                        processed.push(new Prism.Token(token.type, Prism.util.encode(lines[i]), token.alias));
+                    else
+                        processed.push(Prism.util.encode(lines[i]));
+                }
 
-            token = tokens.shift();
+                token = tokens.shift();
+            }
         }
         return processed;
     },
@@ -62,7 +65,7 @@ module.exports = {
     },
 
     getUserFromStorage: function(store) {
-        return JSON.parse(store.getItem('user'));;
+        return JSON.parse(store.getItem('user'));
     },
 
     saveUserToStorage: function(user, store) {
