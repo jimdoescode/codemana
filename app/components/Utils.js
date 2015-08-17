@@ -43,15 +43,14 @@ module.exports = {
     },
 
     syntaxHighlight: function(code, lang) {
-        var lang = lang.toLowerCase();
-        var tokens = this.tokenize(code, lang);
         var lineCount = 0;
         var lines = [''];
+        var tokens = this.tokenize(code, lang.toLowerCase());
         var token = tokens.shift();
 
         while (token)
         {
-            var code = (typeof token === 'object') ? Prism.Token.stringify(token, Prism.languages[lang]) : token;
+            code = (typeof token === 'object') ? Prism.Token.stringify(token, Prism.languages[lang.toLowerCase()]) : token;
             lines[lineCount] += code.replace(/\n/g, '');
             if (code.indexOf('\n') !== -1)
                 lines[++lineCount] = '';
