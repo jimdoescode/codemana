@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build-dev": "node_modules/.bin/browserify -t reactify app/components/*.js -o js/script.js",
-    "build-prod": "node_modules/.bin/browserify -t reactify app/components/*.js | node_modules/.bin/uglifyjs > js/script.min.js",
+    "build-prod": "node_modules/.bin/browserify -t reactify app/components/*.js | node_modules/.bin/uglifyjs > js/script.js",
     "watch": "node_modules/.bin/watchify -t reactify app/components/*.js -o js/script.js",
     "server": "php -S 0.0.0.0:8080",
     "clean-js": "rm js/script.js"
