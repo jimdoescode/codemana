@@ -8,7 +8,6 @@
     "reactify": "latest",
     "watchify": "latest",
     "uglifyjs": "latest",
-    "prismjs": "^0.0.1",
     "qwest": "^2.0.3",
     "react": "^0.13.3",
     "react-async": "^2.1.0",
@@ -16,10 +15,10 @@
     "react-router-component": "^0.26.0"
   },
   "scripts": {
-    "build-dev": "node_modules/.bin/browserify -t reactify app/components/*.jsx -o js/script.js",
-    "build-prod": "node_modules/.bin/browserify -t reactify app/components/*.jsx | node_modules/.bin/uglifyjs > js/script.min.js",
-    "watch": "node_modules/.bin/watchify -t reactify app/components/*.jsx -o js/script.js",
-    "serve": "php -S 0.0.0.0:8080",
+    "build-dev": "node_modules/.bin/browserify -t reactify app/components/*.js -o js/script.js",
+    "build-prod": "node_modules/.bin/browserify -t reactify app/components/*.js | node_modules/.bin/uglifyjs > js/script.min.js",
+    "watch": "node_modules/.bin/watchify -t reactify app/components/*.js -o js/script.js",
+    "server": "php -S 0.0.0.0:8080",
     "clean-js": "rm js/script.js"
   },
   "author": "Jim Saunders",

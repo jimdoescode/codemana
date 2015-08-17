@@ -1,21 +1,18 @@
 var React = require("react");
+var GistForm = require("./GistForm.js");
 
 module.exports = React.createClass({
     getDefaultProps: function() {
         return {origin: window.location.origin};
     },
 
-    gistRedirect: function(event) {
-        event.preventDefault();
-
-        var gistId = event.target.children.namedItem("gistId").value.trim();
-        if (gistId !== "")
-            window.location.href = this.props.origin + "/" + gistId;
-    },
-
     updateStyle: function(event) {
         event.preventDefault();
         document.getElementById('highlight-style').href = event.target.value;
+    },
+
+    shouldComponentUpdate: function(newProps, newState) {
+        return false; //No need to update this thing, it's static
     },
 
     render: function() {
@@ -27,16 +24,9 @@ module.exports = React.createClass({
                             <span>CODE</span><i className="fa fa-flask"/><span>MANA</span>
                         </a>
 
-                        <form className="pure-form pull-left pure-u-2-3" onSubmit={this.gistRedirect} action="#">
-                            <input className="pure-input-1-3" name="gistId" type="text" placeholder="Enter a Gist ID..." required="true"/>
-                        </form>
+                        <GistForm className="pure-form pull-left pure-u-2-3" origin={this.props.origin}/>
 
                         <ul className="pure-menu-list pull-right">
-                            {/*
-                            <li className="pure-menu-item">
-                                <a className="pure-menu-link" href="#"><i className="fa fa-github-square"/> GitHub Login</a>
-                            </li>
-                            */}
                             <li className="pure-menu-item">
                                 <select onChange={this.updateStyle}>
                                     <option value="css/default.css">Default Highlighting</option>

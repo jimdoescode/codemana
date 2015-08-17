@@ -1,4 +1,4 @@
-var Prism = require("prismjs");
+var Prism = require("./Prism.js");
 
 module.exports = {
     tokenizeNewLines: function(str) {

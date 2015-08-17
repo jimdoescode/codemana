@@ -1,8 +1,8 @@
 var React = require("react");
 var Qwest = require("qwest");
 var Modal = require("react-modal");
-var File = require("./File.jsx");
-var Utils = require("./Utils.jsx");
+var File = require("./File.js");
+var Utils = require("./Utils.js");
 
 Modal.setAppElement(document.getElementById("mount-point"));
 Modal.injectCSS();
@@ -38,7 +38,7 @@ module.exports = React.createClass({
         var headers = {};
 
         if (this.state.user !== null) {
-            headers["Authorization"] = 'Basic '+btoa(this.state.user.login+':'+this.state.user.password);
+            headers["Authorization"] = 'Basic ' + btoa(this.state.user.login + ':' + this.state.user.password);
         }
 
         return headers;
