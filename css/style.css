@@ -98,6 +98,7 @@ footer {
         .code-file .line .line-content {
             overflow: hidden;
             cursor: pointer;
+            width: 100%;
         }
 
 .line-num {
