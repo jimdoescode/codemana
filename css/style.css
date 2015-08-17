@@ -53,7 +53,12 @@ pre::-moz-selection, pre ::-moz-selection {text-shadow: none;}
     background-color: #ab4526;
 }
 
-footer {margin-top: 20px;}
+footer {
+    margin-top: 20px;
+    font-size: 8pt;
+    color: #eee;
+    text-align: right;
+}
 .fa-flask {color: #54b0ff;}
 .app-header nav .logo {
     font-size: 16pt;
@@ -66,15 +71,16 @@ footer {margin-top: 20px;}
 
 .main {padding-top: 50px;}
 .hero {
-    padding: 2% 10%;
-    width: 80%;
-    background-color: #282a2b;
+    padding: 5% 20%;
+    background-color: rgba(40, 42, 43, 0.8);
     margin-top: 20px;
-    font-size: 32pt;
     color: #eee;
-    text-align: center;
     border-radius: .5em;
+    text-align: center;
 }
+    .hero h1 {font-size: 32pt;}
+        /*.hero h1 .fa {margin-bottom: 5%;}*/
+    .hero form {color: #000;}
 .container {
     width: 1140px;
     margin: auto;
