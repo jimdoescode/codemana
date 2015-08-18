@@ -3,6 +3,7 @@ var Qwest = require("qwest");
 var Modal = require("react-modal");
 var File = require("./File.js");
 var Utils = require("./Utils.js");
+var Spinner = require("./Spinner.js");
 
 Modal.setAppElement(document.getElementById("mount-point"));
 Modal.injectCSS();
@@ -63,7 +64,8 @@ module.exports = React.createClass({
             comments: [],
             openComment: null,
             showLoginModal: false,
-            user: Utils.getUserFromStorage(sessionStorage)
+            user: Utils.getUserFromStorage(sessionStorage),
+            processing: true
         };
     },
 
@@ -80,7 +82,10 @@ module.exports = React.createClass({
                 files.push(self.parseFile(gist.files[name]));
 
             if (self.isMounted())
-                self.setState({files: files});
+                self.setState({
+                    files: files,
+                    processing: false
+                });
         });
 
         Qwest.get('/gists/'+self.props.id+'/comments', null, options).then(function(xhr, comments) {
@@ -195,11 +200,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        return (
-            <div className="container main">
-                <LoginModal show={this.state.showLoginModal} onSuccess={this.handleLogin} onClose={this.closeModal}/>
-                {
-                    this.state.files.map(function(file) {
+        var body = this.state.processing ?
+                    <Spinner/> : this.state.files.map(function(file) {
                         return <File onCommentFormOpen={this.insertCommentForm}
                                      onCommentFormCancel={this.removeCommentForm}
                                      onCommentFormSubmit={this.postGistComment}
@@ -207,8 +209,12 @@ module.exports = React.createClass({
                                      name={file.name}
                                      lines={file.parsedLines}
                                      comments={this.state.comments[file.name]}/>
-                    }, this)
-                }
+                    }, this);
+
+        return (
+            <div className="container main">
+                <LoginModal show={this.state.showLoginModal} onSuccess={this.handleLogin} onClose={this.closeModal}/>
+                {body}
             </div>
         );
     }
@@ -258,9 +264,7 @@ var LoginModal = React.createClass({
                 self.props.onSuccess(user);
 
             }).complete(function(xhr, user) {
-
                 self.setState({processing: false});
-
             });
         }
     },
@@ -280,17 +284,13 @@ var LoginModal = React.createClass({
             </form>
         );
 
-        var spinner = (
-            <p style={{textAlign: 'center'}}><i className="fa fa-github-alt fa-spin fa-5x"/></p>
-        );
-
         return (
             <Modal isOpen={this.props.show} onRequestClose={this.props.onClose} className="react-modal-content" overlayClassName="react-modal-overlay">
                 <h2><i className="fa fa-github"/> GitHub Access</h2>
                 <p>You need to enter your GitHub user name and GitHub password. This is <strong>only</strong> used to post Gist comments to GitHub.</p>
                 <p>If you prefer not to enter your password you can use a <a href="https://github.com/settings/tokens/new">personal access token</a>. Make sure it has Gist access.</p>
                 <hr/>
-                { this.state.processing ? spinner : form }
+                { this.state.processing ? <Spinner className="fa-github-alt"/> : form }
             </Modal>
         );
     }

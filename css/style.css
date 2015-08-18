@@ -109,6 +109,10 @@ footer {
     cursor: default;
     font-size: 10pt;
 }
+.spinner {
+    text-align: center;
+    color: #eee;
+}
 .pull-left {float: left;}
 .pull-right {float: right;}
 .line-comments {padding: 5px 0;}
