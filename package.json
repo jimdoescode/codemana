@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Enhance GitHub Gists",
   "main": "index.js",
-  "devDependencies": {
+  "dependencies": {
     "browserify": "latest",
     "reactify": "latest",
     "watchify": "latest",
