@@ -54,14 +54,8 @@ module.exports = React.createClass({
     },
 
     parseFile: function(file) {
-        try {
-            var lines = Utils.syntaxHighlight(file.content, file.language);
-            return this.createFile(file.filename, lines)
-        } catch (e) {
-            console.log(e);
-            alert('There was a problem parsing this Gist.');
-            this.setState({processing: false});
-        }
+        var lines = Utils.syntaxHighlight(file.content, file.language);
+        return this.createFile(file.filename, lines)
     },
 
     getInitialState: function() {
@@ -94,7 +88,7 @@ module.exports = React.createClass({
                 });
         }).catch(function(xhr, response, e) {
             console.log(response, e);
-            alert('There was a problem fetching this Gist from GitHub.');
+            alert('There was a problem fetching and or parsing this Gist.');
             self.setState({processing: false});
         });
 
@@ -120,7 +114,7 @@ module.exports = React.createClass({
             }
         }).catch(function(xhr, response, e) {
             console.log(response, e);
-            alert('There was a problem fetching the comments for this Gist from GitHub.');
+            alert('There was a problem fetching the comments for this Gist.');
         });
     },
 
