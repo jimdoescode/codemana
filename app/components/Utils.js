@@ -67,6 +67,7 @@ module.exports = {
         if (Prism.languages[lang]) {
             return Prism.languages[lang];
         }
+        console.log("CodeMana Error - Prism doesn't support the language: "+gistLang+". Help them and us out by adding it http://prismjs.com/");
         throw ({msg: "CodeMana Error - Prism doesn't support the language: " + gistLang});
     },
 
