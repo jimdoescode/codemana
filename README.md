@@ -53,5 +53,7 @@ TODO
 ----
 
  + I'd like to replace the current router with one that works without page refreshes. That will allow me to host this app exclusively on a GitHub page.
+
  + Use Sass instead of hard coded CSS. Then I can move the styling into the app directory and add more compilation and better minification.
+
  + Update prismjs to properly work with requirejs. Right now I can't have prism as an npm dependency because it won't support all the languages I want.
