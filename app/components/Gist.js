@@ -54,8 +54,14 @@ module.exports = React.createClass({
     },
 
     parseFile: function(file) {
-        var lines = Utils.syntaxHighlight(file.content, file.language);
-        return this.createFile(file.filename, lines)
+        try {
+            var lines = Utils.syntaxHighlight(file.content, file.language);
+            return this.createFile(file.filename, lines)
+        } catch (e) {
+            console.log(e);
+            alert('There was a problem parsing this Gist.');
+            this.setState({processing: false});
+        }
     },
 
     getInitialState: function() {
@@ -86,6 +92,10 @@ module.exports = React.createClass({
                     files: files,
                     processing: false
                 });
+        }).catch(function(xhr, response, e) {
+            console.log(response, e);
+            alert('There was a problem fetching this Gist from GitHub.');
+            self.setState({processing: false});
         });
 
         Qwest.get('/gists/'+self.props.id+'/comments', null, options).then(function(xhr, comments) {
@@ -108,6 +118,9 @@ module.exports = React.createClass({
                     comments: parsedComments
                 });
             }
+        }).catch(function(xhr, response, e) {
+            console.log(response, e);
+            alert('There was a problem fetching the comments for this Gist from GitHub.');
         });
     },
 
