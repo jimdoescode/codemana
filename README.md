@@ -1,7 +1,7 @@
 Code Mana
 =========
 
-A Gist enhancement tool. It allows for inline commenting and alternate syntax highlighting.
+A Gist enhancement web app. It allows for inline commenting and alternate syntax highlighting styles.
 
 About
 -----
@@ -57,3 +57,5 @@ TODO
  + Use Sass instead of hard coded CSS. Then I can move the styling into the app directory and add more compilation and better minification.
 
  + Update prismjs to properly work with requirejs. Right now I can't have prism as an npm dependency because it won't support all the languages I want.
+
+ + More syntax highlighting styles!
