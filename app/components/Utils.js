@@ -21,26 +21,23 @@ module.exports = {
 
     tokenize: function(code, lang) {
         var processed = [];
+        var tokens = Prism.tokenize(code, lang);
+        var token = tokens.shift();
 
-        if (Prism.languages[lang]) {
-            var tokens = Prism.tokenize(code, Prism.languages[lang]);
-            var token = tokens.shift();
-
-            while (token)
+        while (token)
+        {
+            var isObj = typeof token === 'object';
+            var lines = this.tokenizeNewLines(isObj ? token.content : token);
+            var count = lines.length;
+            for (var i=0; i < count; i++)
             {
-                var isObj = typeof token === 'object';
-                var lines = this.tokenizeNewLines(isObj ? token.content : token);
-                var count = lines.length;
-                for (var i=0; i < count; i++)
-                {
-                    if (isObj)
-                        processed.push(new Prism.Token(token.type, Prism.util.encode(lines[i]), token.alias));
-                    else
-                        processed.push(Prism.util.encode(lines[i]));
-                }
-
-                token = tokens.shift();
+                if (isObj)
+                    processed.push(new Prism.Token(token.type, Prism.util.encode(lines[i]), token.alias));
+                else
+                    processed.push(Prism.util.encode(lines[i]));
             }
+
+            token = tokens.shift();
         }
         return processed;
     },
@@ -48,12 +45,13 @@ module.exports = {
     syntaxHighlight: function(code, lang) {
         var lineCount = 0;
         var lines = [''];
-        var tokens = this.tokenize(code, lang.toLowerCase());
+        var prismLang = this.getPrismCodeLanguage(lang);
+        var tokens = this.tokenize(code, prismLang);
         var token = tokens.shift();
 
         while (token)
         {
-            code = (typeof token === 'object') ? Prism.Token.stringify(token, Prism.languages[lang.toLowerCase()]) : token;
+            code = (typeof token === 'object') ? Prism.Token.stringify(token, prismLang) : token;
             lines[lineCount] += code.replace(/\n/g, '');
             if (code.indexOf('\n') !== -1)
                 lines[++lineCount] = '';
@@ -62,6 +60,14 @@ module.exports = {
         }
 
         return lines;
+    },
+
+    getPrismCodeLanguage: function(gistLang) {
+        var lang = gistLang.toLowerCase().replace(/#/, 'sharp').replace(/\+/g, 'p');
+        if (Prism.languages[lang]) {
+            return Prism.languages[lang];
+        }
+        throw ({msg: "CodeMana Error - Prism doesn't support the language: " + gistLang});
     },
 
     getUserFromStorage: function(store) {
