@@ -16,11 +16,13 @@ pre {
     background-color: transparent;
     border-radius: inherit;
     color: inherit;
-    font-family: Consolas, Monaco, 'Andale Mono', monospace;
     text-shadow: 0 -.1em .2em #000;
     overflow: hidden;
 }
-code {padding: 2px 0 4px 5px;}
+code {
+    padding: 2px 0 4px 5px;
+    font-family: Hack, Consolas, Monaco, 'Andale Mono', monospace;
+}
 pre::selection, pre ::selection {text-shadow: none;}
 pre::-moz-selection, pre ::-moz-selection {text-shadow: none;}
 .app-header nav {
