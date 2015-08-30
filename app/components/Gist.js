@@ -294,7 +294,7 @@ var LoginModal = React.createClass({
         return (
             <Modal isOpen={this.props.show} onRequestClose={this.props.onClose} className="react-modal-content" overlayClassName="react-modal-overlay">
                 <h2><i className="fa fa-github"/> GitHub Access</h2>
-                <p>You need to enter your GitHub user name and GitHub password. This is <strong>only</strong> used to post Gist comments to GitHub.</p>
+                <p>To leave a comment you need to enter your GitHub user name and GitHub password. This is <strong>only</strong> used to post Gist comments to GitHub.</p>
                 <p>If you prefer not to enter your password you can use a <a target="_blank" href="https://github.com/settings/tokens/new">personal access token</a>. Make sure it has Gist access.</p>
                 <hr/>
                 { this.state.processing ? <Spinner className="fa-github-alt"/> : form }
