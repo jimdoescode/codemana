@@ -24,7 +24,7 @@ module.exports = React.createClass({
                             <span>CODE</span><i className="fa fa-flask"/><span>MANA</span>
                         </a>
 
-                        <GistForm className="pure-form pull-left pure-u-2-3" origin={this.props.origin}/>
+                        <GistForm className="pure-form pull-left pure-u-2-3"/>
 
                         <ul className="pure-menu-list pull-right">
                             <li className="pure-menu-item">

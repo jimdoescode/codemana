@@ -5,14 +5,14 @@
   "main": "index.js",
   "dependencies": {
     "browserify": "latest",
-    "reactify": "latest",
-    "watchify": "latest",
-    "uglifyjs": "latest",
     "qwest": "^2.0.3",
     "react": "^0.13.3",
     "react-async": "^2.1.0",
     "react-modal": "^0.3.0",
-    "react-router-component": "^0.26.0"
+    "react-router": "^0.13.3",
+    "reactify": "latest",
+    "watchify": "latest",
+    "uglifyjs": "latest"
   },
   "scripts": {
     "build-dev": "node_modules/.bin/browserify -t reactify app/components/*.js -o js/script.js",

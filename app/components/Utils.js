@@ -77,5 +77,38 @@ module.exports = {
 
     saveUserToStorage: function(user, store) {
         store.setItem('user', JSON.stringify(user));
+    },
+
+    createComment: function(gistId, commentId, filename, lineNumber, commentBody, commentUser, replyTo, showForm) {
+        return {
+            gistId: gistId,
+            id: commentId,
+            filename: filename,
+            line: parseInt(lineNumber, 10),
+            body: commentBody,
+            user: commentUser,
+            replyTo: replyTo,
+            showForm: showForm
+        };
+    },
+
+    createFile: function(name, parsedLines) {
+        return {
+            name: name,
+            parsedLines: parsedLines
+        };
+    },
+
+    parseComment: function(comment) {
+        //Annoyingly I couldn't get a single regex to separate everything out...
+        var split = comment.body.match(/(\S+)\s(.*)/);
+        var data = split[1].match(/http:\/\/codemana\.com\/(.*)#(.+)-L(\d+)/);
+
+        return data !== null ? this.createComment(data[1], comment.id, data[2], parseInt(data[3], 10), split[2], comment.user, 0, false) : null;
+    },
+
+    parseFile: function(file) {
+        var lines = this.syntaxHighlight(file.content, file.language);
+        return this.createFile(file.filename, lines)
     }
 };

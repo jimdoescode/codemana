@@ -10,52 +10,15 @@ Modal.injectCSS();
 Qwest.base = 'https://api.github.com';
 
 module.exports = React.createClass({
-
-    createComment: function(gistId, commentId, filename, lineNumber, commentBody, commentUser, replyTo, showForm) {
-        return {
-            gistId: gistId,
-            id: commentId,
-            filename: filename,
-            line: parseInt(lineNumber, 10),
-            body: commentBody,
-            user: commentUser,
-            replyTo: replyTo,
-            showForm: showForm
-        };
-    },
-
-    createFile: function(name, parsedLines) {
-        return {
-            name: name,
-            parsedLines: parsedLines
-        };
-    },
-
     createCommentLink: function(filename, lineNumber) {
         return 'http://codemana.com/'+this.props.id+'#'+filename+'-L'+lineNumber;
     },
 
     getHeaders: function() {
         var headers = {};
-
-        if (this.state.user !== null) {
+        if (this.state.user !== null)
             headers["Authorization"] = 'Basic ' + btoa(this.state.user.login + ':' + this.state.user.password);
-        }
-
         return headers;
-    },
-
-    parseComment: function(comment) {
-        //Annoyingly I couldn't get a single regex to separate everything out...
-        var split = comment.body.match(/(\S+)\s(.*)/);
-        var data = split[1].match(/http:\/\/codemana\.com\/(.*)#(.+)-L(\d+)/);
-
-        return data !== null ? this.createComment(data[1], comment.id, data[2], parseInt(data[3], 10), split[2], comment.user, 0, false) : null;
-    },
-
-    parseFile: function(file) {
-        var lines = Utils.syntaxHighlight(file.content, file.language);
-        return this.createFile(file.filename, lines)
     },
 
     getInitialState: function() {
@@ -69,17 +32,17 @@ module.exports = React.createClass({
         };
     },
 
-    componentDidMount: function() {
+    fetchGist: function(gistId) {
         var self = this;
         var options = {
             headers: this.getHeaders(),
             responseType: 'json'
         };
 
-        Qwest.get('/gists/'+self.props.id, null, options).then(function(xhr, gist) {
+        Qwest.get('/gists/'+gistId, null, options).then(function(xhr, gist) {
             var files = [];
             for (var name in gist.files)
-                files.push(self.parseFile(gist.files[name]));
+                files.push(Utils.parseFile(gist.files[name]));
 
             if (self.isMounted())
                 self.setState({
@@ -92,11 +55,11 @@ module.exports = React.createClass({
             self.setState({processing: false});
         });
 
-        Qwest.get('/gists/'+self.props.id+'/comments', null, options).then(function(xhr, comments) {
+        Qwest.get('/gists/'+gistId+'/comments', null, options).then(function(xhr, comments) {
             var parsedComments = {};
             var commentCount = comments.length;
             for (var i=0; i < commentCount; i++) {
-                var parsed = self.parseComment(comments[i]);
+                var parsed = Utils.parseComment(comments[i]);
 
                 if (parsedComments[parsed.filename] === undefined)
                     parsedComments[parsed.filename] = [];
@@ -116,6 +79,15 @@ module.exports = React.createClass({
             console.log(response, e);
             alert('There was a problem fetching the comments for this Gist.');
         });
+    },
+
+    componentDidMount: function() {
+        this.fetchGist(this.props.id);
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        this.setState({processing: true});
+        this.fetchGist(newProps.id);
     },
 
     postGistComment: function(event) {
@@ -148,7 +120,7 @@ module.exports = React.createClass({
     insertCommentForm: function(filename, line, replyTo, event) {
         var comments = this.state.comments;
         var open = this.state.openComment;
-        var newOpen = this.createComment(this.props.id, 0, filename, line, '', this.state.user, replyTo, true);
+        var newOpen = Utils.createComment(this.props.id, 0, filename, line, '', this.state.user, replyTo, true);
 
         if (this.state.user === null) {
             this.setState({showLoginModal: true});
