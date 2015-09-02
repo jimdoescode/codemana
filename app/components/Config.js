@@ -1,6 +1,7 @@
 module.exports = {
 
+    root: '/codemana/',
     gistApi: 'https://api.github.com',
-    origin: window.location.origin
+    origin: 'http://jimdoescode.github.com/codemana'
 
 };

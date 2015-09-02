@@ -69,7 +69,7 @@ var FourOhFourRoute = React.createClass({
 });
 
 var routes = (
-    <Route name="app" path="/" handler={App}>
+    <Route name="app" path={Config.root} handler={App}>
         <Route name="gist" path=":gistId" handler={GistRoute}/>
         <DefaultRoute handler={HomeRoute}/>
         <NotFoundRoute handler={FourOhFourRoute}/>
