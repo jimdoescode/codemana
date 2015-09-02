@@ -4,16 +4,13 @@ var Modal = require("react-modal");
 var File = require("./File.js");
 var Utils = require("./Utils.js");
 var Spinner = require("./Spinner.js");
+var Config = require("./Config.js");
 
 Modal.setAppElement(document.getElementById("mount-point"));
 Modal.injectCSS();
-Qwest.base = 'https://api.github.com';
+Qwest.base = Config.gistApi;
 
 module.exports = React.createClass({
-    createCommentLink: function(filename, lineNumber) {
-        return 'http://codemana.com/'+this.props.id+'#'+filename+'-L'+lineNumber;
-    },
-
     getHeaders: function() {
         var headers = {};
         if (this.state.user !== null)
@@ -108,7 +105,7 @@ module.exports = React.createClass({
             comments[open.filename][open.line].splice(open.replyTo, 1, open);
 
             //Send the comment to GitHub. We only need to handle the case where it doesn't make it
-            Qwest.post('/gists/'+this.props.id+'/comments', {body: this.createCommentLink(open.filename, open.line) + ' ' + text}, options);
+            Qwest.post('/gists/'+this.props.id+'/comments', {body: Utils.createCommentLink(this.props.id, open.filename, open.line) + ' ' + text}, options);
 
             this.setState({
                 comments: comments,

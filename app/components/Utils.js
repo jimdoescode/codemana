@@ -110,5 +110,9 @@ module.exports = {
     parseFile: function(file) {
         var lines = this.syntaxHighlight(file.content, file.language);
         return this.createFile(file.filename, lines)
+    },
+
+    createCommentLink: function(id, filename, lineNumber) {
+        return 'http://codemana.com/'+id+'#'+filename+'-L'+lineNumber;
     }
 };

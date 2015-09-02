@@ -4,6 +4,7 @@ var GistForm = require("./GistForm.js");
 var AppHeader = require("./AppHeader.js");
 var AppFooter = require("./AppFooter.js");
 var Gist = require("./Gist.js");
+var Config = require("./Config.js");
 
 var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
@@ -14,7 +15,7 @@ var App = React.createClass({
     render: function() {
         return (
             <div className="app">
-                <AppHeader origin={window.location.origin}/>
+                <AppHeader origin={Config.origin}/>
                 <RouteHandler/>
                 <AppFooter/>
             </div>
