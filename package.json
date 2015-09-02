@@ -5,6 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "browserify": "latest",
+    "http-server": "^0.8.0",
+    "node-sass": "^3.2.0",
     "qwest": "^2.0.3",
     "react": "^0.13.3",
     "react-async": "^2.1.0",
@@ -18,7 +20,7 @@
     "build-dev": "node_modules/.bin/browserify -t reactify app/components/*.js -o js/script.js",
     "build-prod": "node_modules/.bin/browserify -t reactify app/components/*.js | node_modules/.bin/uglifyjs > js/script.js",
     "watch": "node_modules/.bin/watchify -t reactify app/components/*.js -o js/script.js",
-    "server": "php -S 0.0.0.0:8080",
+    "server": "./node_modules/.bin/http-server ./ -a 0.0.0.0 -p 8080",
     "clean-js": "rm js/script.js"
   },
   "author": "Jim Saunders",

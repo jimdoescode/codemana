@@ -41,8 +41,7 @@ in production settings.
 ```sh
 $ npm run server
 ```
-This attempts to run a local PHP server to host the single index.html file. You could easily change this to use node or
-whatever server you want. I chose PHP because I didn't want to install node and I already had PHP on some of my test servers.
+This runs a local Node server (http://localhost:8080/) to host the app file.
 
 ```sh
 $ npm run clean-js
@@ -52,9 +51,7 @@ Deletes whatever script file is in the `./js` directory.
 TODO
 ----
 
- + I'd like to replace the current router with one that works without page refreshes. That will allow me to host this app exclusively on a GitHub page.
-
-    - This will allow me to replace the PHP server in `npm run server` with a node based server.
+ + ~~I'd like to replace the current router with one that works without page refreshes. That will allow me to host this app exclusively on a GitHub page.~~
 
  + Use Sass instead of hard coded CSS. Then I can move the styling into the app directory and add more compilation and better minification.
 
