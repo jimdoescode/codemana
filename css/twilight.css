@@ -4,10 +4,10 @@
  * @author Remy Bach
  */
 .line {
-    background-color: #121415;
+    background-color: #272822;
     color: hsl(0, 0%, 93%);
 }
-.line-num {background-color: #282a2b;}
+.line-num {background-color: #494A44;}
 .token.comment,
 .token.prolog,
 .token.doctype,

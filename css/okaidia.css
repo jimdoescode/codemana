@@ -4,9 +4,10 @@
  * @author ocodia
  */
 .line {
-    background-color: #272822;
+    background-color: #121415;
     color: #f8f8f2;
 }
+.line-num {background-color: #282a2b;}
 .token.comment,
 .token.prolog,
 .token.doctype,
