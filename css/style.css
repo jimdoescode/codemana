@@ -169,7 +169,6 @@ footer {
     z-index: 100;
     background-color: rgba(55, 57, 58, 0.75) !important;
 }
-
 .react-modal-content {
     background-color: #282a2b !important;
     width: 300px;
@@ -182,8 +181,11 @@ footer {
     color: #eee;
     border: 5px solid #000 !important;
     border-radius: 0.5em !important;
+    overflow: hidden !important;
 }
     .react-modal-content input {
         margin-bottom: 10px !important;
         color: #000;
     }
+    .react-modal-content h2 {margin-top: 0;}
+    .react-modal-content fieldset {padding-top: 0;}
