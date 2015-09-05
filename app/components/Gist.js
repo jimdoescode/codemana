@@ -47,7 +47,7 @@ module.exports = React.createClass({
                     processing: false
                 });
         }).catch(function(xhr, response, e) {
-            console.log(response, e);
+            console.log(xhr, response, e);
             alert('There was a problem fetching and or parsing this Gist.');
             self.setState({processing: false});
         });
@@ -73,7 +73,7 @@ module.exports = React.createClass({
                 });
             }
         }).catch(function(xhr, response, e) {
-            console.log(response, e);
+            console.log(xhr, response, e);
             alert('There was a problem fetching the comments for this Gist.');
         });
     },
@@ -85,6 +85,15 @@ module.exports = React.createClass({
     componentWillReceiveProps: function(newProps) {
         this.setState({processing: true});
         this.fetchGist(newProps.id);
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        //If there is a hash specified then attempt to scroll there.
+        if (window.location.hash) {
+            var elm = document.getElementById(window.location.hash.substring(1));
+            if (elm)
+                window.scrollTo(0, elm.offsetTop);
+        }
     },
 
     postGistComment: function(event) {
