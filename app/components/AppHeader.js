@@ -29,9 +29,9 @@ module.exports = React.createClass({
                         <ul className="pure-menu-list pull-right">
                             <li className="pure-menu-item">
                                 <select onChange={this.updateStyle}>
-                                    <option value="css/default.css">Default Highlighting</option>
-                                    <option value="css/funky.css">Funky Highlighting</option>
                                     <option value="css/okaidia.css">Okaidia Highlighting</option>
+                                    <option value="css/twilight.css">Twilight Highlighting</option>
+                                    <option value="css/funky.css">Funky Highlighting</option>
                                     <option value="css/dark.css">Dark Highlighting</option>
                                 </select>
                             </li>
