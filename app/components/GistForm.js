@@ -23,8 +23,8 @@ module.exports = React.createClass({
 
         var body = (
                 this.props.showButton ?
-                    <fieldset className="pure-group">
-                        <input className="pure-input-1-3" name="gistId" type="text" placeholder="Enter a Gist ID..." required="true"/>&nbsp;
+                    <fieldset>
+                        <input name="gistId" type="text" className="pure-input-1-3" placeholder="Enter a Gist ID..." required="true"/>&nbsp;
                         <button type="submit" className="pure-button button-primary">Go <i className="fa fa-sign-in"/></button>
                     </fieldset>
                 :
