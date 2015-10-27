@@ -16,7 +16,7 @@ code {
     box-shadow: -.3em 0 0 .3em #282a2b, .3em 0 0 .3em #282a2b;
 }
 .line-marker {background-color: #121415}
-.line-num {background-color: #282a2b;}
+.line-num {background-color: rgba(40, 42, 43, 0.75);}
 
 .token.comment,
 .token.prolog,
