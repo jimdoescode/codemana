@@ -3,26 +3,27 @@
     "version": "1.0.0",
     "description": "Enhance GitHub Gists",
     "dependencies": {
-        "babel-preset-react": "^6.5.0",
-        "babelify": "^7.2.0",
-        "browserify": "latest",
-        "node-sass": "^3.4.2",
-        "react": "latest",
-        "react-dom": "latest",
-        "react-modal": "latest",
-        "react-router": "latest",
-        "uglifyjs": "latest",
-        "watchify": "latest",
-        "whatwg-fetch": "^0.10.0"
+        "babel-preset-react": "^6.16.0",
+        "babelify": "^7.3.0",
+        "browserify": "^13.1.0",
+        "node-sass": "^3.10.1",
+        "react": "^15.3.2",
+        "react-dom": "^15.3.2",
+        "react-modal": "^1.4.0",
+        "react-router": "^2.8.1",
+        "uglifyjs": "^2.4.10",
+        "watchify": "^3.7.0",
+        "whatwg-fetch": "^0.10.1"
     },
     "scripts": {
-        "build-dev-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js -o js/script.js",
-        "build-prod-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js | node_modules/.bin/uglifyjs > js/script.js",
-        "build-dev-css": "node-sass --include-path scss scss/style.scss   css/style.css",
-        "watch-js": "node_modules/.bin/watchify -t [ babelify --presets [ react ] ] components/*.js -o js/script.js",
-        "server": "php -S localhost:8000 -t ./",
-        "clean": "rm js/script.js public/css/style.css"
+        "build-dev-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
+        "build-prod-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js | node_modules/.bin/uglifyjs > public/js/script.js",
+        "build-dev-css": "node-sass --include-path scss scss/style.scss   public/css/style.css",
+        "watch-js": "node_modules/.bin/watchify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
+        "start": "php -S localhost:8000 -t ./public/",
+        "clean": "rm public/js/script.js public/css/style.css"
     },
     "author": "Jim Saunders",
-    "license": "MIT"
+    "license": "MIT",
+    "repository":  "https://github.com/jimdoescode/codemana"
 }
