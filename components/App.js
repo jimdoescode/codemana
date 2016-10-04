@@ -1,22 +1,22 @@
 var React  = require("react");
-var Router = require('react-router');
+var ReactDOM = require("react-dom");
+var Router = require("react-router").Router;
+var Route = require("react-router").Route;
+var IndexRoute = require("react-router").IndexRoute;
+var browserHistory = require("react-router").browserHistory;
 var GistForm = require("./GistForm.js");
 var AppHeader = require("./AppHeader.js");
 var AppFooter = require("./AppFooter.js");
-var Gist = require("./Gist.js");
+var CodeBlock = require("./CodeBlock.js");
 var Config = require("./Config.js");
-
-var DefaultRoute = Router.DefaultRoute;
-var NotFoundRoute = Router.NotFoundRoute;
-var Route = Router.Route;
-var RouteHandler = Router.RouteHandler;
+var GistApi = require("./GistApi.js");
 
 var App = React.createClass({
     render: function() {
         return (
             <div className="app">
                 <AppHeader origin={Config.origin}/>
-                <RouteHandler/>
+                {this.props.children}
                 <AppFooter/>
             </div>
         );
@@ -29,8 +29,9 @@ var GistRoute = React.createClass({
     },
 
     render: function() {
+        var Api = GistApi(Config.githubApi);
         return (
-            <Gist id={this.context.router.getCurrentParams().gistId}/>
+            <CodeBlock code={Api.code(this.props.params.gistId)} user={Api.user()} style="okaidia"/>
         );
     }
 });
@@ -68,14 +69,11 @@ var FourOhFourRoute = React.createClass({
     }
 });
 
-var routes = (
-    <Route name="app" path={Config.root} handler={App}>
-        <Route name="gist" path=":gistId" handler={GistRoute}/>
-        <DefaultRoute handler={HomeRoute}/>
-        <NotFoundRoute handler={FourOhFourRoute}/>
-    </Route>
-);
-
-Router.run(routes, Router.HistoryLocation, function (Handler) {
-    React.render(<Handler/>, document.getElementById("mount-point"));
-});
+ReactDOM.render((
+    <Router history={browserHistory}>
+        <Route name="app" path="/" component={App}>
+            <IndexRoute component={HomeRoute}/>
+            <Route name="gist" path="/:gistId" component={GistRoute}/>
+        </Route>
+    </Router>
+), document.getElementById("mount-point"));

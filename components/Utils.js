@@ -1,12 +1,16 @@
-var Prism = require("./Prism.js");
+var Prism = require("./prism.js");
+var Config = require("./Config.js");
+
+var CommentRegex = new RegExp(
+    Config.origin.replace(/[\-\[\]\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") + "/(.*)#(.+)-L(\d+)"
+);
 
 module.exports = {
     tokenizeNewLines: function(str) {
         var tokens = [];
         var strlen = str.length;
         var lineCount = 0;
-        for (var i=0; i < strlen; i++)
-        {
+        for (var i=0; i < strlen; i++) {
             if (tokens[lineCount])
                 tokens[lineCount] += str[i];
             else
@@ -24,13 +28,11 @@ module.exports = {
         var tokens = Prism.tokenize(code, lang);
         var token = tokens.shift();
 
-        while (token)
-        {
+        while (token) {
             var isObj = typeof token === 'object';
             var lines = this.tokenizeNewLines(isObj ? token.content : token);
             var count = lines.length;
-            for (var i=0; i < count; i++)
-            {
+            for (var i=0; i < count; i++) {
                 if (isObj)
                     processed.push(new Prism.Token(token.type, Prism.util.encode(lines[i]), token.alias));
                 else
@@ -49,8 +51,7 @@ module.exports = {
         var tokens = this.tokenize(code, prismLang);
         var token = tokens.shift();
 
-        while (token)
-        {
+        while (token) {
             code = (typeof token === 'object') ? Prism.Token.stringify(token, prismLang) : token;
             lines[lineCount] += code.replace(/\n/g, '');
             if (code.indexOf('\n') !== -1)
@@ -64,19 +65,11 @@ module.exports = {
 
     getPrismCodeLanguage: function(gistLang) {
         var lang = gistLang.toLowerCase().replace(/#/, 'sharp').replace(/\+/g, 'p');
-        if (Prism.languages[lang]) {
+        if (Prism.languages[lang])
             return Prism.languages[lang];
-        }
+
         console.log("CodeMana Error - Prism doesn't support the language: "+gistLang+". Help them and us out by adding it http://prismjs.com/");
         throw ({msg: "CodeMana Error - Prism doesn't support the language: " + gistLang});
-    },
-
-    getUserFromStorage: function(store) {
-        return JSON.parse(store.getItem('user'));
-    },
-
-    saveUserToStorage: function(user, store) {
-        store.setItem('user', JSON.stringify(user));
     },
 
     createComment: function(gistId, commentId, filename, lineNumber, commentBody, commentUser, replyTo, showForm) {
@@ -92,27 +85,29 @@ module.exports = {
         };
     },
 
-    createFile: function(name, parsedLines) {
-        return {
-            name: name,
-            parsedLines: parsedLines
-        };
-    },
-
-    parseComment: function(comment) {
+    parseComment: function(id, body, user) {
         //Annoyingly I couldn't get a single regex to separate everything out...
-        var split = comment.body.match(/(\S+)\s(.*)/);
-        var data = split[1].match(/http:\/\/codemana\.com\/(.*)#(.+)-L(\d+)/);
+        var split = body.match(/(\S+)\s(.*)/);
+        var data = split[1].match(CommentRegex);
 
-        return data !== null ? this.createComment(data[1], comment.id, data[2], parseInt(data[3], 10), split[2], comment.user, 0, false) : null;
+        return data !== null ? this.createComment(data[1], id, data[2], parseInt(data[3], 10), split[2], user, 0, false) : null;
     },
 
-    parseFile: function(file) {
-        var lines = this.syntaxHighlight(file.content, file.language);
-        return this.createFile(file.filename, lines)
+    /**
+     * Returns a file object. This requires having a name
+     * and lines of syntax highlighted code.
+     *
+     * @param content
+     * @param language
+     * @param filename
+     * @returns {{name: *, lines: *}}
+     */
+    parseFile: function(content, language, filename) {
+        var lines = this.syntaxHighlight(content, language);
+        return {name: filename, lines: lines};
     },
 
     createCommentLink: function(id, filename, lineNumber) {
-        return 'http://codemana.com/'+id+'#'+filename+'-L'+lineNumber;
+        return Config.origin+'/'+id+'#'+filename+'-L'+lineNumber;
     }
 };
