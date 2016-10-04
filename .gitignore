@@ -4,3 +4,4 @@ vendor
 node_modules
 public
 app/components/Config.js
+npm-debug.log

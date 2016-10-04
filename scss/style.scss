@@ -1,0 +1,231 @@
+@import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700);
+
+a, .pure-menu-link, .pure-menu-heading {
+    color: #ce6849;
+    text-decoration: none;
+}
+a:hover {
+    color: #ab4526;
+    text-decoration: underline;
+}
+body {background-color: #37393a;}
+pre {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    border-radius: inherit;
+    color: inherit;
+    text-shadow: 0 -.1em .2em #000;
+    overflow: hidden;
+
+    &::selection, ::selection {text-shadow: none;}
+    &::-moz-selection, ::-moz-selection {text-shadow: none;}
+}
+code {
+    padding: 2px 0 4px 5px;
+    font-family: Hack, Consolas, Monaco, 'Andale Mono', monospace;
+}
+
+.app-header nav {
+    border-bottom: 1px solid #000;
+    background-color: #282a2b;
+    height: 50px;
+    font-size: 12pt;
+    padding-top: 0.5em;
+    text-shadow: 0 -.1em .2em #000;
+
+    .pure-form {
+        margin-left: 3em;
+
+        input[type="text"] {padding: 0.3em 0.3em;}
+    }
+
+    .pure-menu-link {
+        padding-top: 0;
+
+        &:focus, &:hover {
+            background-color: transparent;
+            text-decoration: none;
+        }
+    }
+    .logo {
+        font-size: 16pt;
+        padding: 0;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
+
+        .fa-flask {
+            font-size: 18pt;
+            color: #54b0ff;
+        }
+        &:hover, &:focus {
+            text-decoration: none;
+
+            .fa-flask {color: #4383c1;}
+        }
+    }
+}
+
+.button-primary {
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: #4383c1;
+    margin-right: 10px;
+}
+
+.button-error {
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: #ab4526;
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 8pt;
+    color: #eee;
+    text-align: right;
+}
+
+.main {padding-top: 50px;}
+.hero {
+    padding: 5% 20%;
+    background-color: rgba(40, 42, 43, 0.8);
+    margin-top: 20px;
+    color: #eee;
+    border-radius: .5em;
+    text-align: center;
+
+    h1 {
+        font-size: 32pt;
+        /*.fa {margin-bottom: 5%;}*/
+    }
+    form {color: #000;}
+}
+
+.container {
+    width: 1140px;
+    margin: auto;
+}
+.code-file-container {
+    border-radius: 0.5em;
+    margin-top: 20px;
+    max-width: 1140px;
+    overflow-x: auto;
+}
+
+.code-file {
+    width: 100%;
+
+    .spacer {height: 5px;}
+    .line {
+        min-height: 10px;
+
+        .line-content {
+            overflow: hidden;
+            cursor: pointer;
+            width: 100%;
+        }
+    }
+}
+
+.line-num {
+    padding: 3px 7px 0;
+    text-align: right;
+    max-width: 35px;
+    overflow: hidden;
+    cursor: default;
+    font-size: 10pt;
+}
+.spinner {
+    text-align: center;
+    color: #eee;
+}
+.pull-left {float: left;}
+.pull-right {float: right;}
+
+.line-comments {
+    padding: 5px 0;
+
+    :first-child {margin-top: 0;}
+
+    .line-comment {
+        margin-top: 5px;
+        width: 100%;
+        padding: 0 5px;
+        overflow: hidden;
+        cursor: auto;
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                border-radius: .25em;
+            }
+        }
+
+        .content {
+            margin-left: 5px;
+            border-radius: .25em;
+            overflow: hidden;
+            max-width: 800px;
+
+            .comment-header {
+                padding: 10px;
+                overflow: hidden;
+                background-color: #282a2b;
+            }
+
+            .comment-body {
+                color: #eee;
+                padding: 20px 10px;
+                margin: 0;
+                background-color: #37393a;
+
+                textarea {
+                    color: #000;
+                    width: 770px;
+                    height: 175px;
+                    display: block;
+                    margin-bottom: 10px;
+                    padding: 2px;
+                }
+            }
+        }
+    }
+}
+
+/* Special React Modal Styles */
+.react-modal-overlay {
+    z-index: 100;
+    background-color: rgba(55, 57, 58, 0.75) !important;
+}
+.react-modal-content {
+    background-color: #282a2b !important;
+    width: 300px;
+    height: 390px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 100px !important;
+    color: #eee;
+    border: 5px solid #000 !important;
+    border-radius: 0.5em !important;
+    overflow: hidden !important;
+
+    input {
+        margin-bottom: 10px !important;
+        color: #000;
+    }
+    h2 {margin-top: 0;}
+    fieldset {padding-top: 0;}
+}
+
+/* Import all of our syntax highlighting styles */
+@import "dark";
+@import "funky";
+@import "okaidia";
+@import "twilight";

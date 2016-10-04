@@ -1,0 +1,84 @@
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+$background: #121415;
+$foreground: #f8f8f2;
+
+.okaidia {
+    .line {
+        background-color: $background;
+        color: $foreground;
+
+        &-num {
+            background-color: #282a2b;
+        }
+    }
+
+    .namespace {
+        opacity: .7;
+    }
+
+    .token {
+        &.comment, &.prolog,
+        &.doctype, &.cdata {
+            color: #708090;
+        }
+
+        &.punctuation {
+            color: $foreground;
+        }
+
+        &.property, &.tag,
+        &.constant, &.symbol,
+        &.deleted {
+            color: #f92672;
+        }
+
+        &.boolean, &.number {
+            color: #ae81ff;
+        }
+
+        &.selector, &.attr-name,
+        &.string, &.char,
+        &.builtin, &.inserted {
+            color: #a6e22e;
+        }
+
+        &.atrule, &.attr-value,
+        &.function {
+            color: #e6db74;
+        }
+
+        &.keyword {
+            color: #66d9ef;
+        }
+
+        &.regex, &.important {
+            color: #fd971f;
+        }
+
+        &.important, &.bold {
+            font-weight: bold;
+        }
+
+        &.italic {
+            font-style: italic;
+        }
+
+        &.entity {
+            cursor: help;
+        }
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string,
+    .token.variable {
+        color: $foreground;
+    }
+}
