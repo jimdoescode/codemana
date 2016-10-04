@@ -1,7 +1,7 @@
 module.exports = {
 
-    githubApi: 'https://api.github.etsycorp.com',
+    githubApi: 'https://api.github.com',
     github: 'https://github.com',
-    origin: 'https://codemana.com'
+    origin: 'http://codemana.com'
 
 };
