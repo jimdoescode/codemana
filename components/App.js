@@ -24,10 +24,6 @@ var App = React.createClass({
 });
 
 var GistRoute = React.createClass({
-    contextTypes: {
-        router: React.PropTypes.func
-    },
-
     render: function() {
         var Api = GistApi(Config.githubApi);
         return (
@@ -54,16 +50,6 @@ var HomeRoute = React.createClass({
                     </p>
                     <GistForm className="pure-form" showButton="true"/>
                 </section>
-            </div>
-        );
-    }
-});
-
-var FourOhFourRoute = React.createClass({
-    render: function() {
-        return (
-            <div className="container main">
-                NOT FOUND!!
             </div>
         );
     }
