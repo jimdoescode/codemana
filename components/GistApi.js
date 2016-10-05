@@ -38,6 +38,17 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
                 obj['Authorization'] = 'Basic ' + token;
 
             return new Headers(obj);
+        },
+
+        formatUser: function (githubUser) {
+            if (!githubUser)
+                return null;
+
+            return {
+                name: githubUser.login,
+                avatar_url: githubUser.avatar_url,
+                html_url: githubUser.html_url
+            }
         }
     };
 
@@ -51,7 +62,7 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
             var userBaseUrl = baseUrl + '/user';
             return {
                 login: function (user, pass) {
-                    local.setAuthToken(user + ':' + pass);
+                    local.setAuthToken(window.btoa(user + ':' + pass));
 
                     return Promise.race([
                         local.timeout(),
@@ -69,7 +80,8 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
 
                 getData: function () {
                     if (this.isLoggedIn())
-                        return local.getUserData();
+                        return local.formatUser(local.getUserData());
+
                     return null;
                 },
 
@@ -119,7 +131,11 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
                         var comments = {};
                         var commentCount = commentJson.length;
                         for (var i=0; i < commentCount; i++) {
-                            var parsed = Utils.parseComment(commentJson[i].id, commentJson[i].body, commentJson[i].user);
+                            var parsed = Utils.parseComment(
+                                commentJson[i].id,
+                                commentJson[i].body,
+                                local.formatUser(commentJson[i].user)
+                            );
 
                             if (comments[parsed.filename] === undefined)
                                 comments[parsed.filename] = [];
