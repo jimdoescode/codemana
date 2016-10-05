@@ -1,9 +1,8 @@
-var React = require("react");
-var Modal = require("react-modal");
-var Config = require("./Config.js");
+const React = require("react");
+const Modal = require("react-modal");
+const Config = require("./Config.js");
 
 Modal.setAppElement(document.getElementById("mount-point"));
-Modal.injectCSS();
 
 module.exports = React.createClass({
 
