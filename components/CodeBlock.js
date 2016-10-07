@@ -219,7 +219,7 @@ const File = React.createClass({
         for (var i=0; i < lineCount; i++) {
             var num = i + 1;
             lines.push(
-                <CodeLine key={"codeline"+this.props.name+num}
+                <CodeLine key={"codeline" + this.props.name + num}
                           filename={this.props.name}
                           number={num}
                           code={this.props.lines[i]}
@@ -229,7 +229,7 @@ const File = React.createClass({
             //If comments exist for this line then add those in a new line just below.
             if (this.props.comments && this.props.comments[num] && this.props.comments[num].length > 0) {
                 lines.push(
-                    <CommentsLine key={"commentsline"+this.props.name+num}
+                    <CommentsLine key={"commentsline" + this.props.name + num}
                                   filename={this.props.name}
                                   comments={this.props.comments[num]}
                                   onSubmit={this.props.onSubmitComment}
@@ -299,7 +299,7 @@ const CommentsLine = React.createClass({
     render: function () {
         var comments = this.props.comments.map(function (comment, index) {
             return (
-                <Comment key={"comment"+this.props.filename+comment.id} user={comment.user}>
+                <Comment key={"comment" + this.props.filename + comment.id} user={comment.user}>
                     {comment.isOpen ?
                         <form action="#" onSubmit={this.props.onSubmit.bind(null, comment)} className="comment-body">
                             <textarea name="text" placeholder="Enter your comment..." defaultValue={comment.body} onChange={this.updateCommentText.bind(this, index)}/>
@@ -330,7 +330,7 @@ const Line = React.createClass({
         number: React.PropTypes.number,
         style: React.PropTypes.string,
         filename: React.PropTypes.string.isRequired,
-        toggleable: React.PropTypes.bool,
+        toggle: React.PropTypes.string,
         onClick: React.PropTypes.func
     },
 
@@ -338,7 +338,7 @@ const Line = React.createClass({
         return {
             number: 0,
             style: '',
-            toggleable: false,
+            toggle: '',
             onClick: function () {}
         }
     },

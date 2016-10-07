@@ -29,7 +29,16 @@ module.exports = {
         var token = tokens.shift();
 
         while (token) {
-            var isObj = typeof token === 'object';
+            var isObj = token instanceof Object;
+
+            //Sometimes token content is more tokens. We need to handle that.
+            if (isObj && token.content instanceof Array) {
+                tokens = token.content.concat(tokens);
+                token = tokens.shift();
+                continue;
+            }
+
+            //If the content is a string then process it as normal
             var lines = this.tokenizeNewLines(isObj ? token.content : token);
             var count = lines.length;
             for (var i=0; i < count; i++) {
