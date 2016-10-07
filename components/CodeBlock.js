@@ -70,7 +70,21 @@ module.exports = React.createClass({
         this.setState({showLoginModal: true});
     },
 
-    setNewComment: function (fileName, lineNumber, e) {
+    removeOpenComment: function(comments) {
+        var commentCount = comments.length;
+        //Remove the old comment if it existed
+        for (var i=0; i < commentCount; i++) {
+            if (comments[i].isOpen) {
+                comments.splice(i, 1);
+                commentCount--; //We just removed a comment from the array so adjust the array count.
+            }
+        }
+        return comments;
+    },
+
+    setNewComment: function (fileName, lineNumber, index, e) {
+        e.preventDefault();
+
         var self = this;
         if (!this.props.user.isLoggedIn()) {
             self.showLoginModal();
@@ -78,9 +92,14 @@ module.exports = React.createClass({
         }
 
         self.setState(function (oldState, props) {
-            //Check if we already have a new comment some where.
-            var newComment = oldState.newComment ? oldState.newComment : props.code.getNewComment();
             var allComments = oldState.comments;
+            var hasOpenComment = !!oldState.newComment;
+
+            //Check if we already have a new comment some where.
+            if (hasOpenComment)
+                allComments[oldState.newComment.fileName][oldState.newComment.lineNumber] = self.removeOpenComment(allComments[oldState.newComment.fileName][oldState.newComment.lineNumber]);
+
+            var newComment = hasOpenComment ? oldState.newComment : props.code.getNewComment();
 
             //If the location of this comment doesn't
             //currently exist then we create it.
@@ -90,25 +109,12 @@ module.exports = React.createClass({
             if (allComments[fileName][lineNumber] === undefined)
                 allComments[fileName][lineNumber] = [];
 
-            var comments = allComments[fileName][lineNumber];
-            var commentCount = comments.length;
-
-            //Remove the old comment if it existed
-            for (var i=0; i < commentCount; i++) {
-                if (comments[i].isOpen) {
-                    comments.splice(i, 1);
-                    commentCount--; //We just removed a comment from the array so adjust the array count.
-                }
-            }
-
-            allComments[fileName][lineNumber] = comments;
-
             lineNumber = parseInt(lineNumber, 10);
             newComment.fileName = fileName;
             newComment.lineNumber = lineNumber;
             newComment.body = '';
 
-            allComments[fileName][lineNumber].unshift(newComment);
+            allComments[fileName][lineNumber].splice(index, 0, newComment);
 
             return {
                 comments: allComments,
@@ -146,19 +152,12 @@ module.exports = React.createClass({
     },
 
     removeComment: function (comment, e) {
-        this.setState(function (oldState, props) {
+        e.preventDefault();
+
+        var self = this;
+        self.setState(function (oldState, props) {
             var allComments = oldState.comments;
-            var comments = allComments[comment.fileName][comment.lineNumber];
-            var commentCount = comments.length;
-
-            for (var i=0; i < commentCount; i++) {
-                if (comments[i].isOpen) {
-                    comments.splice(i, 1);
-                    commentCount--; //We just removed a comment from the array so adjust the array count.
-                }
-            }
-
-            allComments[comment.fileName][comment.lineNumber] = comments;
+            allComments[comment.fileName][comment.lineNumber] = self.removeOpenComment(allComments[comment.fileName][comment.lineNumber]);
 
             return {
                 comments: allComments
@@ -206,7 +205,7 @@ const File = React.createClass({
 
     getDefaultProps: function () {
         return {
-            onLineClick: function (fileName, lineNumber, e) {},
+            onLineClick: function (fileName, lineNumber, index, e) {},
             onCancelComment: function (comment, e) {},
             onSubmitComment: function (comment, e) {}
         };
@@ -220,8 +219,8 @@ const File = React.createClass({
             var num = i + 1;
             lines.push(
                 <CodeLine key={"codeline" + this.props.name + num}
-                          filename={this.props.name}
-                          number={num}
+                          fileName={this.props.name}
+                          lineNumber={num}
                           code={this.props.lines[i]}
                           onClick={this.props.onLineClick}/>
             );
@@ -230,10 +229,12 @@ const File = React.createClass({
             if (this.props.comments && this.props.comments[num] && this.props.comments[num].length > 0) {
                 lines.push(
                     <CommentsLine key={"commentsline" + this.props.name + num}
-                                  filename={this.props.name}
+                                  fileName={this.props.name}
+                                  lineNumber={num}
                                   comments={this.props.comments[num]}
                                   onSubmit={this.props.onSubmitComment}
-                                  onCancel={this.props.onCancelComment}/>
+                                  onCancel={this.props.onCancelComment}
+                                  onReply={this.props.onLineClick}/>
                 );
             }
         }
@@ -262,8 +263,8 @@ const File = React.createClass({
 
 const CodeLine = React.createClass({
     propTypes: {
-        filename: React.PropTypes.string.isRequired,
-        number: React.PropTypes.number.isRequired,
+        fileName: React.PropTypes.string.isRequired,
+        lineNumber: React.PropTypes.number.isRequired,
         code: React.PropTypes.string.isRequired,
         onClick: React.PropTypes.func.isRequired
     },
@@ -275,7 +276,7 @@ const CodeLine = React.createClass({
 
     render: function () {
         return (
-            <Line filename={this.props.filename} number={this.props.number} onClick={this.props.onClick}>
+            <Line fileName={this.props.fileName} lineNumber={this.props.lineNumber} onClick={this.props.onClick}>
                 <pre>
                     <code dangerouslySetInnerHTML={{__html: this.props.code}}/>
                 </pre>
@@ -286,10 +287,12 @@ const CodeLine = React.createClass({
 
 const CommentsLine = React.createClass({
     propTypes: {
-        filename: React.PropTypes.string.isRequired,
+        fileName: React.PropTypes.string.isRequired,
+        lineNumber: React.PropTypes.number.isRequired,
         comments: React.PropTypes.array.isRequired,
         onSubmit: React.PropTypes.func.isRequired,
-        onCancel: React.PropTypes.func.isRequired
+        onCancel: React.PropTypes.func.isRequired,
+        onReply: React.PropTypes.func.isRequired
     },
 
     updateCommentText: function (index, e) {
@@ -299,7 +302,7 @@ const CommentsLine = React.createClass({
     render: function () {
         var comments = this.props.comments.map(function (comment, index) {
             return (
-                <Comment key={"comment" + this.props.filename + comment.id} user={comment.user}>
+                <Comment key={"comment" + this.props.fileName + comment.id} user={comment.user} onReply={comment.isOpen ? null : this.props.onReply.bind(null, this.props.fileName, this.props.lineNumber, index + 1)}>
                     {comment.isOpen ?
                         <form action="#" onSubmit={this.props.onSubmit.bind(null, comment)} className="comment-body">
                             <textarea name="text" placeholder="Enter your comment..." defaultValue={comment.body} onChange={this.updateCommentText.bind(this, index)}/>
@@ -317,7 +320,7 @@ const CommentsLine = React.createClass({
         }, this);
 
         return (
-            <Line filename={this.props.filename} style="line-comments">
+            <Line fileName={this.props.fileName} style="line-comments">
                 {comments}
             </Line>
         );
@@ -327,19 +330,19 @@ const CommentsLine = React.createClass({
 const Line = React.createClass({
     propTypes: {
         //Make this a string so that it can be empty. It's only for display anyways.
-        number: React.PropTypes.number,
+        lineNumber: React.PropTypes.number,
         style: React.PropTypes.string,
-        filename: React.PropTypes.string.isRequired,
+        fileName: React.PropTypes.string.isRequired,
         toggle: React.PropTypes.string,
         onClick: React.PropTypes.func
     },
 
     getDefaultProps: function () {
         return {
-            number: 0,
+            lineNumber: 0,
             style: '',
             toggle: '',
-            onClick: function () {}
+            onClick: function (fileName, lineNumber, index) {}
         }
     },
 
@@ -347,8 +350,8 @@ const Line = React.createClass({
         return (
             <tr className={this.props.style.length > 0 ? "line " + this.props.style : "line"}>
                 <td className="line-marker"/>
-                <td className="line-num">{this.props.number > 0 ? this.props.number : ''}</td>
-                <td className="line-content" onClick={this.props.onClick.bind(null, this.props.filename, this.props.number)}>
+                <td className="line-num">{this.props.lineNumber > 0 ? this.props.lineNumber : ''}</td>
+                <td className="line-content" onClick={this.props.onClick.bind(null, this.props.fileName, this.props.lineNumber, 0)}>
                     {this.props.children}
                 </td>
             </tr>
@@ -363,6 +366,13 @@ const Comment = React.createClass({
             avatarUrl: React.PropTypes.string,
             name: React.PropTypes.string
         }).isRequired,
+        onReply: React.PropTypes.func
+    },
+
+    getDefaultProps: function () {
+        return {
+            onReply: null
+        }
     },
 
     render: function () {
@@ -371,7 +381,11 @@ const Comment = React.createClass({
                 <a className="avatar pull-left" href={this.props.user.htmlUrl}><img src={this.props.user.avatarUrl} alt=""/></a>
                 <div className="pull-left content">
                     <header className="comment-header">
-                        <a href={this.props.user.htmlUrl}>{this.props.user.name}</a>
+                        <a className="pull-left" href={this.props.user.htmlUrl}>{this.props.user.name}</a>
+                        {this.props.onReply ?
+                            <a className="pull-right" href="#" onClick={this.props.onReply} title="Reply"><i className="fa fa-reply"/></a> :
+                            ''
+                        }
                     </header>
                     {this.props.children}
                 </div>

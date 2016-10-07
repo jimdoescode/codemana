@@ -4,7 +4,7 @@ module.exports = React.createClass({
     render: function () {
         return (
             <footer>
-                <p className="container">&copy; Jim Saunders</p>
+                <p className="container">&copy; CodeMana.com</p>
             </footer>
         );
     }
