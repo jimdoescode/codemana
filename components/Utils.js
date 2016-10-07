@@ -2,7 +2,7 @@ var Prism = require("./prism.js");
 var Config = require("./Config.js");
 
 var CommentRegex = new RegExp(
-    Config.origin.replace(/[\-\[\]\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") + "/(.*)#(.+)-L(\d+)"
+    "^" + Config.origin.replace(/[\/\-\[\]\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") + "\\/(.+)#(.+)-L(\\d+)$"
 );
 
 module.exports = {
@@ -72,25 +72,60 @@ module.exports = {
         throw ({msg: "CodeMana Error - Prism doesn't support the language: " + gistLang});
     },
 
-    createComment: function(gistId, commentId, filename, lineNumber, commentBody, commentUser, replyTo, showForm) {
+    /**
+     * Returns a basic comment object.
+     * @param id The id of this comment use 0 if it's new
+     * @param rawBody The raw text of a comment
+     * @param isOpen If this is a new comment or an existing one.
+     * @param parsedUser The object returned by calling Utils.parseUser.
+     * @param saveMethod A function that saves this comment
+     * @returns {*}
+     */
+    parseComment: function(id, rawBody, isOpen, parsedUser, saveMethod) {
+        var filename = null;
+        var body = '';
+        var line = null;
+
+        //If this is an existing comment then parse the rawBody
+        if (!isOpen) {
+            //Annoyingly I couldn't get a single regex to separate everything out...
+            var split = rawBody.match(/^(\S+)\s(.*)$/);
+            var data = split[1].match(CommentRegex);
+
+            if (!data) {
+                return null;
+            }
+
+            filename = data[2];
+            line = parseInt(data[3], 10);
+            body = split[2];
+        }
+
         return {
-            gistId: gistId,
-            id: commentId,
-            filename: filename,
-            line: parseInt(lineNumber, 10),
-            body: commentBody,
-            user: commentUser,
-            replyTo: replyTo,
-            showForm: showForm
+            id: id,
+            fileName: filename,
+            lineNumber: line,
+            body: body,
+            user: parsedUser,
+            isOpen: isOpen,
+            save: saveMethod
         };
     },
 
-    parseComment: function(id, body, user) {
-        //Annoyingly I couldn't get a single regex to separate everything out...
-        var split = body.match(/(\S+)\s(.*)/);
-        var data = split[1].match(CommentRegex);
-
-        return data !== null ? this.createComment(data[1], id, data[2], parseInt(data[3], 10), split[2], user, 0, false) : null;
+    /**
+     * Returns a general user object.
+     *
+     * @param name
+     * @param url
+     * @param avatar
+     * @returns {{name: *, html_url: *, avatar_url: *}}
+     */
+    parseUser: function(name, url, avatar) {
+        return {
+            name: name,
+            htmlUrl: url,
+            avatarUrl: avatar
+        };
     },
 
     /**

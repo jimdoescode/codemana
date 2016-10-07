@@ -40,15 +40,17 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
             return new Headers(obj);
         },
 
+        /**
+         * Takes a user object from GitHub and formats it so that we
+         * can use it generally throughout the rest of the code.
+         *
+         * @param githubUser
+         * @returns {*}
+         */
         formatUser: function (githubUser) {
-            if (!githubUser)
-                return null;
-
-            return {
-                name: githubUser.login,
-                avatar_url: githubUser.avatar_url,
-                html_url: githubUser.html_url
-            }
+            return githubUser ?
+                Utils.parseUser(githubUser.login, githubUser.html_url, githubUser.avatar_url) :
+                null;
         }
     };
 
@@ -101,6 +103,33 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
             var user = this.user();
             var gistBaseUrl = baseUrl + '/gists/' + id;
 
+            //This function gets attached to each comment
+            var saveComment = function () {
+                if (!user.isLoggedIn())
+                    return Promise.reject('You must be logged in to make a comment.');
+
+                var commentBody = Utils.createCommentLink(id, this.fileName, this.lineNumber) + ' ' + this.body;
+
+                return Promise.race([
+                    local.timeout(),
+                    window.fetch(gistBaseUrl + '/comments', {
+                        method: 'POST',
+                        headers: local.getHeaders(),
+                        body: JSON.stringify({body: commentBody})
+                    })
+                ]).then(function (response) {
+                    return response.json();
+                }).then(function (commentJson) {
+                    return Utils.parseComment(
+                        commentJson.id,
+                        commentJson.body,
+                        false,
+                        local.formatUser(commentJson.user),
+                        saveComment
+                    )
+                });
+            };
+
             return {
                 fetch: function () {
                     return Promise.race([
@@ -130,46 +159,30 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
                     }).then(function (commentJson) {
                         var comments = {};
                         var commentCount = commentJson.length;
+
                         for (var i=0; i < commentCount; i++) {
                             var parsed = Utils.parseComment(
                                 commentJson[i].id,
                                 commentJson[i].body,
-                                local.formatUser(commentJson[i].user)
+                                false,
+                                local.formatUser(commentJson[i].user),
+                                saveComment
                             );
 
-                            if (comments[parsed.filename] === undefined)
-                                comments[parsed.filename] = [];
+                            if (!comments[parsed.fileName])
+                                comments[parsed.fileName] = [];
 
-                            if (comments[parsed.filename][parsed.line] === undefined)
-                                comments[parsed.filename][parsed.line] = [];
+                            if (!comments[parsed.fileName][parsed.lineNumber])
+                                comments[parsed.fileName][parsed.lineNumber] = [];
 
-                            comments[parsed.filename][parsed.line].push(parsed);
+                            comments[parsed.fileName][parsed.lineNumber].push(parsed);
                         }
                         return comments;
                     });
                 },
 
-                commentTemplate: {
-                    text: '',
-                    filename: '',
-                    linenumber: 0,
-                    post: function () {
-                        if (!user.isLoggedIn())
-                            return Promise.reject('You must be logged in to make a comment.');
-
-                        this.text = Utils.createCommentLink(id, this.filename, this.linenumber) + ' ' + this.text;
-
-                        return Promise.race([
-                            local.timeout(),
-                            window.fetch(gistBaseUrl + '/comments', {
-                                method: 'POST',
-                                headers: local.getHeaders(),
-                                body: this.text
-                            })
-                        ]).then(function (response) {
-                            return response.json();
-                        });
-                    }
+                getNewComment: function () {
+                    return Utils.parseComment(0, '', true, user.getData(), saveComment);
                 }
             };
         }
