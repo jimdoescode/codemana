@@ -1,9 +1,7 @@
-var React  = require("react");
-var Router = require('react-router');
+const React  = require("react");
+const Config = require("./Config.js");
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation],
-
     getDefaultProps: function() {
         return {
             className: "",
@@ -16,7 +14,7 @@ module.exports = React.createClass({
 
         var gistId = event.target.elements.namedItem("gistId").value.trim();
         if (gistId.length > 0)
-            this.transitionTo('gist', {gistId: gistId});
+            window.location = Config.origin + "/" + gistId;
     },
 
     render: function() {
