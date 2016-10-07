@@ -18,7 +18,7 @@ module.exports = React.createClass({
             getData: React.PropTypes.func
         }).isRequired,
 
-        style: React.PropTypes.string.isRequired
+        className: React.PropTypes.string.isRequired
     },
 
     getInitialState: function () {
@@ -139,7 +139,7 @@ module.exports = React.createClass({
                     comments: allComments
                 };
             });
-        }).catch(function(message) {
+        }).catch(function (message) {
             window.alert("There was a problem posting this comment. Please try again.");
             console.log(message);
         });
@@ -168,7 +168,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className={"container main " + this.props.style}>
+            <div className={"container main " + this.props.className}>
                 <LoginModal user={this.props.user} show={this.state.showLoginModal} onClose={this.hideLoginModal}/>
                 {
                     //Show either a spinner or however many files there are in the gist.
@@ -204,7 +204,7 @@ const File = React.createClass({
         onSubmitComment: React.PropTypes.func
     },
 
-    getDefaultProps: function() {
+    getDefaultProps: function () {
         return {
             onLineClick: function (fileName, lineNumber, e) {},
             onCancelComment: function (comment, e) {},
@@ -212,7 +212,7 @@ const File = React.createClass({
         };
     },
 
-    render: function() {
+    render: function () {
         var lines = [];
         var lineCount = this.props.lines.length;
 
@@ -273,7 +273,7 @@ const CodeLine = React.createClass({
         return false;
     },
 
-    render: function() {
+    render: function () {
         return (
             <Line filename={this.props.filename} number={this.props.number} onClick={this.props.onClick}>
                 <pre>
@@ -296,7 +296,7 @@ const CommentsLine = React.createClass({
         this.props.comments[index].body = e.target.value;
     },
 
-    render: function() {
+    render: function () {
         var comments = this.props.comments.map(function (comment, index) {
             return (
                 <Comment key={"comment"+this.props.filename+comment.id} user={comment.user}>

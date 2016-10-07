@@ -24,10 +24,23 @@ var App = React.createClass({
 });
 
 var GistRoute = React.createClass({
+    getInitialState: function () {
+        return {
+            highlightStyle: 'okaidia'
+        }
+    },
+
+    componentDidMount: function() {
+        var self = this;
+        document.addEventListener('highlightChange', function(e) {
+            self.setState({highlightStyle: e.detail});
+        });
+    },
+
     render: function() {
         var Api = GistApi(Config.githubApi);
         return (
-            <CodeBlock code={Api.code(this.props.params.gistId)} user={Api.user()} style="okaidia"/>
+            <CodeBlock code={Api.code(this.props.params.gistId)} user={Api.user()} className={this.state.highlightStyle}/>
         );
     }
 });

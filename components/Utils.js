@@ -6,7 +6,7 @@ var CommentRegex = new RegExp(
 );
 
 module.exports = {
-    tokenizeNewLines: function(str) {
+    tokenizeNewLines: function (str) {
         var tokens = [];
         var strlen = str.length;
         var lineCount = 0;
@@ -23,7 +23,7 @@ module.exports = {
         return tokens;
     },
 
-    tokenize: function(code, lang) {
+    tokenize: function (code, lang) {
         var processed = [];
         var tokens = Prism.tokenize(code, lang);
         var token = tokens.shift();
@@ -44,7 +44,7 @@ module.exports = {
         return processed;
     },
 
-    syntaxHighlight: function(code, lang) {
+    syntaxHighlight: function (code, lang) {
         var lineCount = 0;
         var lines = [''];
         var prismLang = this.getPrismCodeLanguage(lang);
@@ -63,7 +63,7 @@ module.exports = {
         return lines;
     },
 
-    getPrismCodeLanguage: function(gistLang) {
+    getPrismCodeLanguage: function (gistLang) {
         var lang = gistLang.toLowerCase().replace(/#/, 'sharp').replace(/\+/g, 'p');
         if (Prism.languages[lang])
             return Prism.languages[lang];
@@ -81,7 +81,7 @@ module.exports = {
      * @param saveMethod A function that saves this comment
      * @returns {*}
      */
-    parseComment: function(id, rawBody, isOpen, parsedUser, saveMethod) {
+    parseComment: function (id, rawBody, isOpen, parsedUser, saveMethod) {
         var filename = null;
         var body = '';
         var line = null;
@@ -120,7 +120,7 @@ module.exports = {
      * @param avatar
      * @returns {{name: *, html_url: *, avatar_url: *}}
      */
-    parseUser: function(name, url, avatar) {
+    parseUser: function (name, url, avatar) {
         return {
             name: name,
             htmlUrl: url,
@@ -137,12 +137,12 @@ module.exports = {
      * @param filename
      * @returns {{name: *, lines: *}}
      */
-    parseFile: function(content, language, filename) {
+    parseFile: function (content, language, filename) {
         var lines = this.syntaxHighlight(content, language);
         return {name: filename, lines: lines};
     },
 
-    createCommentLink: function(id, filename, lineNumber) {
+    createCommentLink: function (id, filename, lineNumber) {
         return Config.origin+'/'+id+'#'+filename+'-L'+lineNumber;
     }
 };

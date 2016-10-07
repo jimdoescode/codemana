@@ -16,18 +16,18 @@ module.exports = React.createClass({
         onClose: React.PropTypes.func
     },
 
-    getDefaultProps: function() {
+    getDefaultProps: function () {
         return {
             show: false,
-            onClose: function() {}
+            onClose: function () {}
         };
     },
 
-    getInitialState: function() {
+    getInitialState: function () {
         return {processing: false};
     },
 
-    attemptLogin: function(event) {
+    attemptLogin: function (event) {
         var username = event.target.elements.namedItem("username").value.trim();
         var password = event.target.elements.namedItem("password").value;
         var store = event.target.elements.namedItem("store").checked;
@@ -47,12 +47,12 @@ module.exports = React.createClass({
         }
     },
 
-    onClose: function() {
+    onClose: function () {
         this.setState({processing: false});
         this.props.onClose();
     },
 
-    render: function() {
+    render: function () {
         var form = (
             <form className="pure-form pure-form-stacked" onSubmit={this.attemptLogin}>
                 <fieldset>

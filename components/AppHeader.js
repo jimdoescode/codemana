@@ -2,20 +2,21 @@ var React = require("react");
 var GistForm = require("./GistForm.js");
 
 module.exports = React.createClass({
-    getDefaultProps: function() {
+    getDefaultProps: function () {
         return {origin: window.location.origin};
     },
 
-    updateStyle: function(event) {
-        event.preventDefault();
-        document.getElementById('highlight-style').href = event.target.value;
-    },
-
-    shouldComponentUpdate: function(newProps, newState) {
+    shouldComponentUpdate: function (newProps, newState) {
         return false; //No need to update this thing, it's static
     },
 
-    render: function() {
+    fireHighlightChangeEvent: function (e) {
+        document.dispatchEvent(
+            new CustomEvent('highlightChange', {detail: e.target.value})
+        );
+    },
+
+    render: function () {
         return (
             <header className="app-header">
                 <nav className="pure-menu pure-menu-horizontal pure-menu-fixed">
@@ -28,11 +29,11 @@ module.exports = React.createClass({
 
                         <ul className="pure-menu-list pull-right">
                             <li className="pure-menu-item">
-                                <select onChange={this.updateStyle}>
-                                    <option value="css/okaidia.css">Okaidia Highlighting</option>
-                                    <option value="css/twilight.css">Twilight Highlighting</option>
-                                    <option value="css/funky.css">Funky Highlighting</option>
-                                    <option value="css/dark.css">Dark Highlighting</option>
+                                <select id="syntax-highlighting" onChange={this.fireHighlightChangeEvent}>
+                                    <option value="okaidia">Okaidia Highlighting</option>
+                                    <option value="twilight">Twilight Highlighting</option>
+                                    <option value="funky">Funky Highlighting</option>
+                                    <option value="dark">Dark Highlighting</option>
                                 </select>
                             </li>
                         </ul>

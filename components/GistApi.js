@@ -99,7 +99,7 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
             };
         },
 
-        code: function(id) {
+        code: function (id) {
             var user = this.user();
             var gistBaseUrl = baseUrl + '/gists/' + id;
 
