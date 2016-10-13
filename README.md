@@ -53,6 +53,11 @@ $ npm run clean
 ```
 Deletes the script file in the `./public/js` directory and deletes the css files in the `./public/css` directory.
 
+Configuration
+-------------
+
+If you'd like to use codemana on an internal network or use an enterprise version of GitHub you can change the values in  `./components/Config.js` to your preferences. After you change the configs you should recompile and make sure a server is pointing at the public folder.
+
 TODO
 ----
 

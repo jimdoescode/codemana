@@ -3,5 +3,4 @@
 vendor
 node_modules
 public
-components/Config.js
 npm-debug.log
