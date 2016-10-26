@@ -181,7 +181,11 @@ footer {
                 padding: 1px 10px;
                 margin: 0;
                 background-color: #37393a;
+            }
 
+            form.comment-body {
+                padding: 16px 10px;
+                
                 textarea {
                     color: #000;
                     width: 770px;
