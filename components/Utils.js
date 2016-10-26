@@ -98,7 +98,7 @@ module.exports = {
         //If this is an existing comment then parse the rawBody
         if (!isOpen) {
             //Annoyingly I couldn't get a single regex to separate everything out...
-            var split = rawBody.match(/^(\S+)\s(.*)$/);
+            var split = rawBody.match(/^(\S+)\s([\s\S]+?)$/);
             var data = split[1].match(CommentRegex);
 
             if (!data) {
