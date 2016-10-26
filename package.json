@@ -1,29 +1,30 @@
 {
-    "name": "CodeMana",
-    "version": "1.0.0",
-    "description": "Enhance GitHub Gists",
-    "dependencies": {
-        "babel-preset-react": "^6.16.0",
-        "babelify": "^7.3.0",
-        "browserify": "^13.1.0",
-        "node-sass": "^3.10.1",
-        "react": "^15.3.2",
-        "react-dom": "^15.3.2",
-        "react-modal": "^1.4.0",
-        "react-router": "^2.8.1",
-        "uglifyjs": "^2.4.10",
-        "watchify": "^3.7.0",
-        "whatwg-fetch": "^0.10.1"
-    },
-    "scripts": {
-        "build-dev-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
-        "build-prod-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js | node_modules/.bin/uglifyjs > public/js/script.js",
-        "build-dev-css": "node-sass ./scss/style.scss --output=./public/css",
-        "watch-js": "node_modules/.bin/watchify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
-        "start": "php -S 0.0.0.0:8000 -t ./public/",
-        "clean": "rm public/js/script.js public/css/style.css"
-    },
-    "author": "Jim Saunders",
-    "license": "MIT",
-    "repository":  "https://github.com/jimdoescode/codemana"
+  "name": "CodeMana",
+  "version": "1.0.0",
+  "description": "Enhance GitHub Gists",
+  "dependencies": {
+    "babel-preset-react": "^6.16.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "marked": "^0.3.6",
+    "node-sass": "^3.10.1",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-modal": "^1.4.0",
+    "react-router": "^2.8.1",
+    "uglifyjs": "^2.4.10",
+    "watchify": "^3.7.0",
+    "whatwg-fetch": "^0.10.1"
+  },
+  "scripts": {
+    "build-dev-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
+    "build-prod-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js | node_modules/.bin/uglifyjs > public/js/script.js",
+    "build-dev-css": "node-sass ./scss/style.scss --output=./public/css",
+    "watch-js": "node_modules/.bin/watchify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
+    "start": "php -S 0.0.0.0:8000 -t ./public/",
+    "clean": "rm public/js/script.js public/css/style.css"
+  },
+  "author": "Jim Saunders",
+  "license": "MIT",
+  "repository": "https://github.com/jimdoescode/codemana"
 }

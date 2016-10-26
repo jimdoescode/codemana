@@ -313,7 +313,7 @@ const CommentsLine = React.createClass({
                                 <i className="fa fa-times-circle"/> Cancel
                             </button>
                         </form> :
-                        <p className="comment-body">{comment.body}</p>
+                        <div className="comment-body" dangerouslySetInnerHTML={{__html: comment.body}}/>
                     }
                 </Comment>
             );

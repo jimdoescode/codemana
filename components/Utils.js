@@ -1,4 +1,5 @@
 var Prism = require("./prism.js");
+var Marked = require("marked");
 var Config = require("./Config.js");
 
 var CommentRegex = new RegExp(
@@ -107,7 +108,9 @@ module.exports = {
 
             filename = data[2];
             line = parseInt(data[3], 10);
-            body = split[2];
+            //We call dangerouslySetInnerHtml when setting
+            //comment body so attempt to sanitize it.
+            body = Marked(split[2], {"sanitize":true});
         }
 
         return {
