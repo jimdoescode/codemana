@@ -1,6 +1,7 @@
 const React = require("react");
 const Modal = require("react-modal");
 const Config = require("./Config.js");
+const Spinner = require("./Spinner.js");
 
 Modal.setAppElement(document.getElementById("mount-point"));
 
