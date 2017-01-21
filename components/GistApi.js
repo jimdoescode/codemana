@@ -3,24 +3,35 @@ var Utils = require("./Utils.js");
 //Pull in the fetch shim
 require('whatwg-fetch');
 
-module.exports = function (baseUrl, timeoutSeconds, storage) {
+module.exports = function (baseUrl, timeoutSeconds) {
 
     //These are private methods.
     var local = {
+        setStore: function (store) {
+            this.store = store;
+        },
+
+        getStore: function () {
+            if (!this.store)
+                this.setStore(window.localStorage);
+
+            return this.store;
+        },
+
         getAuthToken: function () {
-            return storage.getItem('gistAuthToken');
+            return this.getStore().getItem('gistAuthToken');
         },
 
         setAuthToken: function (token) {
-            storage.setItem('gistAuthToken', token);
+            this.getStore().setItem('gistAuthToken', token);
         },
 
         getUserData: function () {
-            return JSON.parse(storage.getItem('githubUserData'));
+            return JSON.parse(this.getStore().getItem('githubUserData'));
         },
 
         setUserData: function (data) {
-            return storage.setItem('githubUserData', data);
+            return this.getStore().setItem('githubUserData', data);
         },
 
         timeout: function () {
@@ -56,7 +67,6 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
 
     //Set some defaults if they weren't set during initialization.
     baseUrl = !!baseUrl ? baseUrl : 'https://api.github.com';
-    storage = !!storage ? storage : sessionStorage;
     timeoutSeconds = !!timeoutSeconds ? timeoutSeconds : 10;
 
     return {
@@ -78,6 +88,10 @@ module.exports = function (baseUrl, timeoutSeconds, storage) {
                         local.setAuthToken(null);
                         return data;
                     });
+                },
+
+                setStorage: function (store) {
+                    local.setStore(store);
                 },
 
                 getData: function () {

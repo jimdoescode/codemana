@@ -7,7 +7,7 @@
     "babelify": "^7.3.0",
     "browserify": "^13.1.0",
     "marked": "^0.3.6",
-    "node-sass": "^3.10.1",
+    "node-sass": "^3.13.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-modal": "^1.4.0",

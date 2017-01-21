@@ -38,9 +38,9 @@ var GistRoute = React.createClass({
     },
 
     render: function() {
-        var Api = GistApi(Config.githubApi);
+        var api = GistApi(Config.githubApi);
         return (
-            <CodeBlock code={Api.code(this.props.params.gistId)} user={Api.user()} className={this.state.highlightStyle}/>
+            <CodeBlock code={api.code(this.props.params.gistId)} user={api.user()} className={this.state.highlightStyle}/>
         );
     }
 });

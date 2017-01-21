@@ -31,13 +31,18 @@ module.exports = React.createClass({
     attemptLogin: function (event) {
         var username = event.target.elements.namedItem("username").value.trim();
         var password = event.target.elements.namedItem("password").value;
-        var store = event.target.elements.namedItem("store").checked;
+        var tempLogin = event.target.elements.namedItem("temp").checked;
         var self = this;
 
         event.preventDefault();
 
         if (username && password) {
             self.setState({processing: true});
+
+            if (tempLogin) {
+                self.props.user.setStorage(window.sessionStorage);
+            }
+
             self.props.user.login(username, password).then(function (user) {
                 self.onClose();
             }).catch(function (message) {
@@ -48,7 +53,10 @@ module.exports = React.createClass({
         }
     },
 
-    onClose: function () {
+    onClose: function (event) {
+        if (event)
+            event.preventDefault();
+
         this.setState({processing: false});
         this.props.onClose();
     },
@@ -57,9 +65,9 @@ module.exports = React.createClass({
         var form = (
             <form className="pure-form pure-form-stacked" onSubmit={this.attemptLogin}>
                 <fieldset>
-                    <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..." required="true"/>
-                    <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..." required="true"/>
-                    <label><input name="store" type="checkbox"/> Store in Memory</label>
+                    <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
+                    <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
+                    <label><input name="temp" type="checkbox" defaultChecked/> Temporary Login</label>
                 </fieldset>
                 <fieldset>
                     <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
