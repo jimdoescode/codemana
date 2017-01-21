@@ -73,6 +73,10 @@ module.exports = {
         return lines;
     },
 
+    parseLines: function (text) {
+        return text.split(/\n/);
+    },
+
     getPrismCodeLanguage: function (gistLang) {
         var lang = gistLang.toLowerCase().replace(/#/, 'sharp').replace(/\+/g, 'p');
         if (Prism.languages[lang])
@@ -102,9 +106,8 @@ module.exports = {
             var split = rawBody.match(/^(\S+)\s([\s\S]+?)$/);
             var data = split[1].match(CommentRegex);
 
-            if (!data) {
+            if (!data)
                 return null;
-            }
 
             filename = data[2];
             line = parseInt(data[3], 10);
@@ -150,7 +153,12 @@ module.exports = {
      * @returns {{name: *, lines: *}}
      */
     parseFile: function (content, language, filename) {
-        var lines = this.syntaxHighlight(content, language);
+        // Plain text can't be syntax highlighted
+        // so just parse the lines and return.
+        var lines = (language === 'Text') ?
+            this.parseLines(content) :
+            this.syntaxHighlight(content, language);
+
         return {name: filename, lines: lines};
     },
 
