@@ -67,7 +67,7 @@ module.exports = React.createClass({
                 <fieldset>
                     <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
                     <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
-                    <label><input name="temp" type="checkbox" defaultChecked/> Temporary Login</label>
+                    <label><input name="temp" type="checkbox"/> Temporary Login</label>
                 </fieldset>
                 <fieldset>
                     <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
