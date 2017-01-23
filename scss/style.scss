@@ -218,7 +218,6 @@ footer {
     position: relative;
     background-color: #282a2b !important;
     width: 300px;
-    height: 390px;
     margin-right: -50%;
     top: 50%;
     right: auto;
@@ -237,7 +236,10 @@ footer {
         color: #000;
     }
     h2 {margin-top: 0;}
-    fieldset {padding-top: 0;}
+    fieldset {
+        padding-top: 0;
+        &.buttons {padding-bottom: 0;}
+    }
 }
 
 /* Import all of our syntax highlighting styles */

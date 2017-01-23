@@ -38,11 +38,6 @@ module.exports = React.createClass({
 
         if (username && password) {
             self.setState({processing: true});
-
-            if (remember) {
-                self.props.user.setStorage(window.localStorage);
-            }
-
             self.props.user.login(username, password).then(function (user) {
                 self.onClose();
             }).catch(function (message) {
@@ -67,9 +62,8 @@ module.exports = React.createClass({
                 <fieldset>
                     <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
                     <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
-                    <label><input name="remember" type="checkbox"/> Remember Me</label>
                 </fieldset>
-                <fieldset>
+                <fieldset className="buttons">
                     <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
                     <button className="pure-button button-error" onClick={this.onClose}><i className="fa fa-times-circle"/> Cancel</button>
                 </fieldset>

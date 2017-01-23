@@ -3,43 +3,32 @@ var Utils = require("./Utils.js");
 //Pull in the fetch shim
 require('whatwg-fetch');
 
-module.exports = function (baseUrl, timeoutSeconds) {
+module.exports = function (baseUrl, timeoutSeconds, storage) {
 
     //These are private methods.
     var local = {
-        setStore: function (store) {
-            this.store = store;
-        },
-
-        getStore: function () {
-            if (!this.store)
-                this.setStore(window.localStorage);
-
-            return this.store;
-        },
-
         getAuthToken: function () {
-            return this.getStore().getItem('gistAuthToken');
+            return storage.getItem('gistAuthToken');
         },
 
         setAuthToken: function (token) {
-            this.getStore().setItem('gistAuthToken', token);
+            storage.setItem('gistAuthToken', token);
         },
 
         clearAuthToken: function () {
-            this.getStore().removeItem('gistAuthToken');
+            storage.removeItem('gistAuthToken');
         },
 
         getUserData: function () {
-            return JSON.parse(this.getStore().getItem('githubUserData'));
+            return JSON.parse(storage.getItem('githubUserData'));
         },
 
         setUserData: function (data) {
-            return this.getStore().setItem('githubUserData', data);
+            return storage.setItem('githubUserData', data);
         },
 
         clearUserData: function () {
-            this.getStore().removeItem('githubUserData');
+            storage.removeItem('githubUserData');
         },
 
         timeout: function () {
@@ -76,6 +65,7 @@ module.exports = function (baseUrl, timeoutSeconds) {
     //Set some defaults if they weren't set during initialization.
     baseUrl = !!baseUrl ? baseUrl : 'https://api.github.com';
     timeoutSeconds = !!timeoutSeconds ? timeoutSeconds : 10;
+    storage = !!storage ? storage : localStorage;
 
     return {
         user: function () {
