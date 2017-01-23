@@ -31,7 +31,7 @@ module.exports = React.createClass({
     attemptLogin: function (event) {
         var username = event.target.elements.namedItem("username").value.trim();
         var password = event.target.elements.namedItem("password").value;
-        var tempLogin = event.target.elements.namedItem("temp").checked;
+        var remember = event.target.elements.namedItem("remember").checked;
         var self = this;
 
         event.preventDefault();
@@ -39,8 +39,8 @@ module.exports = React.createClass({
         if (username && password) {
             self.setState({processing: true});
 
-            if (tempLogin) {
-                self.props.user.setStorage(window.sessionStorage);
+            if (remember) {
+                self.props.user.setStorage(window.localStorage);
             }
 
             self.props.user.login(username, password).then(function (user) {
@@ -67,7 +67,7 @@ module.exports = React.createClass({
                 <fieldset>
                     <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
                     <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
-                    <label><input name="temp" type="checkbox"/> Temporary Login</label>
+                    <label><input name="remember" type="checkbox"/> Remember Me</label>
                 </fieldset>
                 <fieldset>
                     <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
