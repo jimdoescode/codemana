@@ -109,9 +109,14 @@ footer {
 }
 .code-file-container {
     border-radius: 0.5em;
-    margin-top: 20px;
+    margin-bottom: 20px;
     max-width: 1140px;
     overflow-x: auto;
+}
+
+.highlight-selector {
+    margin: 10px 0 5px 0;
+    text-align: right;
 }
 
 .code-file {
