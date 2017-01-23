@@ -31,7 +31,6 @@ module.exports = React.createClass({
     attemptLogin: function (event) {
         var username = event.target.elements.namedItem("username").value.trim();
         var password = event.target.elements.namedItem("password").value;
-        var remember = event.target.elements.namedItem("remember").checked;
         var self = this;
 
         event.preventDefault();
