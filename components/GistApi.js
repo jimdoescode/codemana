@@ -26,12 +26,20 @@ module.exports = function (baseUrl, timeoutSeconds) {
             this.getStore().setItem('gistAuthToken', token);
         },
 
+        clearAuthToken: function () {
+            this.getStore().removeItem('gistAuthToken');
+        },
+
         getUserData: function () {
             return JSON.parse(this.getStore().getItem('githubUserData'));
         },
 
         setUserData: function (data) {
             return this.getStore().setItem('githubUserData', data);
+        },
+
+        clearUserData: function () {
+            this.getStore().removeItem('githubUserData');
         },
 
         timeout: function () {
@@ -102,8 +110,8 @@ module.exports = function (baseUrl, timeoutSeconds) {
                 },
 
                 logout: function () {
-                    local.setUserData(null);
-                    local.setAuthToken(null);
+                    local.clearAuthToken();
+                    local.clearUserData();
                     return Promise.resolve();
                 },
 
