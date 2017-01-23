@@ -17,6 +17,10 @@ module.exports = React.createClass({
             window.location = Config.origin + "/" + gistId;
     },
 
+    shouldComponentUpdate: function (newProps, newState) {
+        return false;
+    },
+
     render: function() {
 
         var body = (
