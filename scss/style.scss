@@ -44,6 +44,7 @@ code {
 
     .pure-menu-link {
         padding-top: 0;
+        outline: none;
 
         &:focus, &:hover {
             background-color: transparent;
@@ -60,8 +61,6 @@ code {
             color: #54b0ff;
         }
         &:hover, &:focus {
-            text-decoration: none;
-
             .fa-flask {color: #4383c1;}
         }
     }
@@ -115,7 +114,7 @@ footer {
 }
 
 .highlight-selector {
-    margin: 10px 0 5px 0;
+    margin: 5px 0;
     text-align: right;
 }
 

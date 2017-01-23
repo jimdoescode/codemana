@@ -1,21 +1,42 @@
-var React  = require("react");
-var ReactDOM = require("react-dom");
-var Router = require("react-router").Router;
-var Route = require("react-router").Route;
-var IndexRoute = require("react-router").IndexRoute;
-var browserHistory = require("react-router").browserHistory;
-var GistForm = require("./GistForm.js");
-var AppHeader = require("./AppHeader.js");
-var AppFooter = require("./AppFooter.js");
-var CodeBlock = require("./CodeBlock.js");
-var Config = require("./Config.js");
-var GistApi = require("./GistApi.js");
+const React  = require("react");
+const ReactDOM = require("react-dom");
+const Router = require("react-router").Router;
+const Route = require("react-router").Route;
+const IndexRoute = require("react-router").IndexRoute;
+const browserHistory = require("react-router").browserHistory;
+const GistForm = require("./GistForm.js");
+const AppHeader = require("./AppHeader.js");
+const AppFooter = require("./AppFooter.js");
+const CodeBlock = require("./CodeBlock.js");
+const Config = require("./Config.js");
+const GistApi = require("./GistApi.js");
+const LoginModal = require("./LoginModal.js");
 
-var App = React.createClass({
+const App = React.createClass({
+    getInitialState: function () {
+        return {
+            showLoginModal: false,
+        }
+    },
+
+    hideLoginModal: function () {
+        this.setState({showLoginModal: false});
+    },
+
+    componentDidMount: function() {
+        var self = this;
+        document.addEventListener('showLoginModal', function(e) {
+            self.setState({showLoginModal: true});
+        });
+    },
+
     render: function() {
+        var userApi = this.props.route.api.user();
+
         return (
             <div className="app">
-                <AppHeader origin={Config.origin}/>
+                <AppHeader origin={Config.origin} user={userApi}/>
+                <LoginModal user={userApi} show={this.state.showLoginModal} onClose={this.hideLoginModal}/>
                 {this.props.children}
                 <AppFooter/>
             </div>
@@ -23,29 +44,18 @@ var App = React.createClass({
     }
 });
 
-var GistRoute = React.createClass({
-    getInitialState: function () {
-        return {
-            highlightStyle: 'okaidia'
-        }
-    },
-
-    componentDidMount: function() {
-        var self = this;
-        document.addEventListener('highlightChange', function(e) {
-            self.setState({highlightStyle: e.detail});
-        });
-    },
-
+const GistRoute = React.createClass({
     render: function() {
-        var api = GistApi(Config.githubApi);
+        console.log(this.props.route);
+
         return (
-            <CodeBlock code={api.code(this.props.params.gistId)} user={api.user()} className={this.state.highlightStyle}/>
+            <CodeBlock user={this.props.route.api.user()}
+                       code={this.props.route.api.code(this.props.params.gistId)}/>
         );
     }
 });
 
-var HomeRoute = React.createClass({
+const HomeRoute = React.createClass({
     render: function() {
         return (
             <div className="container main">
@@ -70,9 +80,9 @@ var HomeRoute = React.createClass({
 
 ReactDOM.render((
     <Router history={browserHistory}>
-        <Route name="app" path="/" component={App}>
+        <Route name="app" path="/" api={GistApi(Config.githubApi)} component={App}>
             <IndexRoute component={HomeRoute}/>
-            <Route name="gist" path="/:gistId" component={GistRoute}/>
+            <Route name="gist" path="/:gistId" api={GistApi(Config.githubApi)} component={GistRoute}/>
         </Route>
     </Router>
 ), document.getElementById("mount-point"));
