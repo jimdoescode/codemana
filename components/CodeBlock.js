@@ -1,6 +1,5 @@
 const React = require("react");
 const Spinner = require("./Spinner.js");
-const LoginModal = require("./LoginModal.js");
 
 module.exports = React.createClass({
 
@@ -16,9 +15,7 @@ module.exports = React.createClass({
             logout: React.PropTypes.func,
             isLoggedIn: React.PropTypes.func,
             getData: React.PropTypes.func
-        }).isRequired,
-
-        className: React.PropTypes.string.isRequired
+        }).isRequired
     },
 
     getInitialState: function () {
@@ -26,8 +23,8 @@ module.exports = React.createClass({
             files: [],
             comments: [],
             newComment: null,
-            showLoginModal: false,
-            processing: true
+            processing: true,
+            highlightStyle: 'okaidia'
         };
     },
 
@@ -62,12 +59,10 @@ module.exports = React.createClass({
         }
     },
 
-    hideLoginModal: function () {
-        this.setState({showLoginModal: false});
-    },
-
     showLoginModal: function () {
-        this.setState({showLoginModal: true});
+        document.dispatchEvent(
+            new CustomEvent('showLoginModal')
+        );
     },
 
     removeOpenComment: function(comments) {
@@ -165,10 +160,14 @@ module.exports = React.createClass({
         });
     },
 
+    changeHighlight: function (e) {
+        this.setState({'highlightStyle': e.target.value});
+    },
+
     render: function() {
         return (
-            <div className={"container main " + this.props.className}>
-                <LoginModal user={this.props.user} show={this.state.showLoginModal} onClose={this.hideLoginModal}/>
+            <div className={"container main " + this.state.highlightStyle}>
+                <HighlightSelector onChange={this.changeHighlight}/>
                 {
                     //Show either a spinner or however many files there are in the gist.
                     this.state.processing ?
@@ -184,6 +183,25 @@ module.exports = React.createClass({
                                          onSubmitComment={this.submitComment}/>
                         }, this)
                 }
+            </div>
+        );
+    }
+});
+
+const HighlightSelector = React.createClass({
+    propTypes: {
+        onChange: React.PropTypes.func.isRequired
+    },
+
+    render: function () {
+        return (
+            <div className="highlight-selector">
+                <select onChange={this.props.onChange}>
+                    <option value="okaidia">Okaidia Highlighting</option>
+                    <option value="twilight">Twilight Highlighting</option>
+                    <option value="funky">Funky Highlighting</option>
+                    <option value="dark">Dark Highlighting</option>
+                </select>
             </div>
         );
     }
