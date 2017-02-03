@@ -17,7 +17,6 @@ pre {
     background-color: transparent;
     border-radius: inherit;
     color: inherit;
-    text-shadow: 0 -.1em .2em #000;
     overflow: hidden;
 
     &::selection, ::selection {text-shadow: none;}
@@ -34,7 +33,6 @@ code {
     height: 50px;
     font-size: 12pt;
     padding-top: 0.5em;
-    text-shadow: 0 -.1em .2em #000;
 
     .pure-form {
         margin-left: 3em;
