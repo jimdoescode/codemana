@@ -46,8 +46,6 @@ const App = React.createClass({
 
 const GistRoute = React.createClass({
     render: function() {
-        console.log(this.props.route);
-
         return (
             <CodeBlock user={this.props.route.api.user()}
                        code={this.props.route.api.code(this.props.params.gistId)}/>
