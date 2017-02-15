@@ -104,21 +104,21 @@ module.exports.hideLoginModal = function() {
 module.exports.changeHighlight = function(highlight) {
     return {
         type: this.CHANGE_HIGHLIGHT,
-        highlight
+        highlight: highlight
     }
 };
 
 function requestComments(gistId) {
     return {
         type: module.exports.REQUEST_COMMENTS,
-        gistId
+        gistId: gistId
     }
 }
 
 function receiveComments(gistId, entries) {
     return {
         type: module.exports.RECEIVE_COMMENTS,
-        gistId,
+        gistId: gistId,
         entries: entries
     }
 }
@@ -159,7 +159,7 @@ module.exports.fetchComments = function(gistId) {
             console.log(message);
             dispatch(receiveComments(gistId, {}));
         });
-    }
+    };
 };
 
 module.exports.showCommentForm = function(user, fileName, lineNumber, index = 0, isEdit = false) {
@@ -184,7 +184,7 @@ module.exports.hideCommentForm = function() {
 function requestPostComment(gistId, comment) {
     return {
         type: module.exports.REQUEST_POST_COMMENT,
-        gistId,
+        gistId: gistId,
         comment: comment
     }
 }
@@ -192,7 +192,7 @@ function requestPostComment(gistId, comment) {
 function receivePostComment(gistId, comment) {
     return {
         type: module.exports.RECEIVE_POST_COMMENT,
-        gistId,
+        gistId: gistId,
         comment: comment
     }
 }
@@ -237,14 +237,14 @@ module.exports.postComment = function(gistId, comment, commentText) {
 function requestCode(gistId) {
     return {
         type: module.exports.REQUEST_CODE,
-        gistId
+        gistId: gistId
     }
 }
 
 function receiveCode(gistId, files) {
     return {
         type: module.exports.RECEIVE_CODE,
-        gistId,
+        gistId: gistId,
         files: files
     }
 }
@@ -279,5 +279,5 @@ module.exports.fetchCode = function(gistId) {
             console.log(message);
             dispatch(receiveCode(gistId, []));
         });
-    }
+    };
 };
