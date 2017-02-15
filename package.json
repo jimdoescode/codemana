@@ -15,13 +15,13 @@
     "react-router": "^2.8.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
-    "uglifyjs": "^2.4.10",
+    "uglifyify": "^3.0.4",
     "watchify": "^3.9.0",
     "whatwg-fetch": "^0.10.1"
   },
   "scripts": {
     "build-dev-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
-    "build-prod-js": "node_modules/.bin/browserify -t [ babelify --presets [ react ] ] components/*.js | node_modules/.bin/uglifyjs > public/js/script.js",
+    "build-prod-js": "NODE_ENV=production node_modules/.bin/browserify -t [ babelify --presets [ react ] ] -g uglifyify components/*.js > public/js/script.js",
     "build-dev-css": "node-sass ./scss/style.scss --output=./public/css",
     "watch-js": "node_modules/.bin/watchify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
     "start": "php -S 0.0.0.0:8000 -t ./public/",
