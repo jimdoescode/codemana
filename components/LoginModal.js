@@ -1,6 +1,5 @@
 const React = require("react");
 const Modal = require("react-modal");
-const Config = require("./Config.js");
 const Spinner = require("./Spinner.js");
 
 Modal.setAppElement(document.getElementById("mount-point"));
@@ -8,74 +7,44 @@ Modal.setAppElement(document.getElementById("mount-point"));
 module.exports = React.createClass({
 
     propTypes: {
-        user: React.PropTypes.shape({
-            login: React.PropTypes.func,
-            logout: React.PropTypes.func,
-            isLoggedIn: React.PropTypes.func
-        }).isRequired,
-        show: React.PropTypes.bool,
-        onClose: React.PropTypes.func
+        github: React.PropTypes.string,
+        show: React.PropTypes.bool.isRequired,
+        processing: React.PropTypes.bool.isRequired,
+        onLogin: React.PropTypes.func.isRequired,
+        onClose: React.PropTypes.func.isRequired
     },
 
     getDefaultProps: function () {
         return {
+            github: 'https://github.com',
             show: false,
+            processing: false,
+            onLogin: function () {},
             onClose: function () {}
         };
     },
 
-    getInitialState: function () {
-        return {processing: false};
-    },
-
-    attemptLogin: function (event) {
-        var username = event.target.elements.namedItem("username").value.trim();
-        var password = event.target.elements.namedItem("password").value;
-        var self = this;
-
-        event.preventDefault();
-
-        if (username && password) {
-            self.setState({processing: true});
-            self.props.user.login(username, password).then(function (user) {
-                self.onClose();
-            }).catch(function (message) {
-                window.alert("Failed to login. Please try again.");
-                console.log(message);
-                self.setState({processing: false});
-            });
-        }
-    },
-
-    onClose: function (event) {
-        if (event)
-            event.preventDefault();
-
-        this.setState({processing: false});
-        this.props.onClose();
-    },
-
     render: function () {
         var form = (
-            <form className="pure-form pure-form-stacked" onSubmit={this.attemptLogin}>
+            <form className="pure-form pure-form-stacked" onSubmit={e => this.props.onLogin(e.target.elements.namedItem("username").value.trim(), e.target.elements.namedItem("password").value)}>
                 <fieldset>
                     <input name="username" className="pure-input-1" type="text" placeholder="GitHub User Name..."/>
                     <input name="password" className="pure-input-1" type="password" placeholder="GitHub Password or Token..."/>
                 </fieldset>
                 <fieldset className="buttons">
                     <button type="submit" className="pure-button button-primary"><i className="fa fa-save"/> Save</button>
-                    <button className="pure-button button-error" onClick={this.onClose}><i className="fa fa-times-circle"/> Cancel</button>
+                    <button className="pure-button button-error" onClick={this.props.onClose}><i className="fa fa-times-circle"/> Cancel</button>
                 </fieldset>
             </form>
         );
 
         return (
-            <Modal isOpen={this.props.show} onRequestClose={this.onClose} className="react-modal-content" overlayClassName="react-modal-overlay">
+            <Modal isOpen={this.props.show} onRequestClose={this.props.onClose} className="react-modal-content" overlayClassName="react-modal-overlay">
                 <h2><i className="fa fa-github"/> GitHub Access</h2>
                 <p>To leave a comment you need to enter your GitHub user name and GitHub password. This is <strong>only</strong> used to post Gist comments to GitHub.</p>
-                <p>If you prefer not to enter your password you can use a <a target="_blank" href={Config.github + "/settings/tokens/new"}>personal access token</a>. Make sure it has Gist access.</p>
+                <p>If you prefer not to enter your password you can use a <a target="_blank" href={this.props.github + "/settings/tokens/new"}>personal access token</a>. Make sure it has Gist access.</p>
                 <hr/>
-                { this.state.processing ? <Spinner className="fa-github-alt"/> : form }
+                { this.props.processing ? <Spinner className="fa-github-alt"/> : form }
             </Modal>
         );
     }

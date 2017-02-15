@@ -7,6 +7,22 @@ var CommentRegex = new RegExp(
 );
 
 module.exports = {
+    timeoutPromise: function (seconds = 10) {
+        return new Promise(function (resolve, reject) {
+            window.setTimeout(function() {
+                reject('request timeout after ' + seconds + ' seconds')
+            }, seconds * 1000);
+        });
+    },
+
+    getRequestHeaders: function (token) {
+        var obj = {'Content-Type': 'application/json'};
+        if (token)
+            obj['Authorization'] = 'Basic ' + token;
+
+        return new Headers(obj);
+    },
+
     tokenizeNewLines: function (str) {
         var tokens = [];
         var strlen = str.length;
@@ -86,24 +102,29 @@ module.exports = {
         throw ({msg: "CodeMana Error - Prism doesn't support the language: " + gistLang});
     },
 
+    parseGitHubComment: function (comment) {
+        return this.parseComment(comment.id, comment.body, this.parseGitHubUser(comment.user), false, false);
+    },
+
     /**
      * Returns a basic comment object.
      * @param id The id of this comment use 0 if it's new
-     * @param rawBody The raw text of a comment
-     * @param isOpen If this is a new comment or an existing one.
+     * @param rawComment The raw text of a comment
      * @param parsedUser The object returned by calling Utils.parseUser.
-     * @param saveMethod A function that saves this comment
+     * @param isOpen If this is a new comment or an existing one.
+     * @param isPosting If this comment is currently being sent out
      * @returns {*}
      */
-    parseComment: function (id, rawBody, isOpen, parsedUser, saveMethod) {
+    parseComment: function (id, rawComment, parsedUser, isOpen, isPosting) {
         var filename = null;
         var body = '';
+        var raw = '';
         var line = null;
 
-        //If this is an existing comment then parse the rawBody
+        //If this is an existing comment then parse the rawComment
         if (!isOpen) {
             //Annoyingly I couldn't get a single regex to separate everything out...
-            var split = rawBody.match(/^(\S+)\s([\s\S]+?)$/);
+            var split = rawComment.match(/^(\S+)\s([\s\S]+?)$/);
             var data = split[1].match(CommentRegex);
 
             if (!data)
@@ -114,6 +135,7 @@ module.exports = {
             //We call dangerouslySetInnerHtml when setting
             //comment body so attempt to sanitize it.
             body = Marked(split[2], {"sanitize":true});
+            raw = split[2];
         }
 
         return {
@@ -121,22 +143,29 @@ module.exports = {
             fileName: filename,
             lineNumber: line,
             body: body,
+            rawBody: raw,
             user: parsedUser,
             isOpen: isOpen,
-            save: saveMethod
+            isPosting: isPosting
         };
+    },
+
+    parseGitHubUser: function (user) {
+        return this.parseUser(user.id, user.login, user.html_url, user.avatar_url);
     },
 
     /**
      * Returns a general user object.
      *
+     * @param id
      * @param name
      * @param url
      * @param avatar
-     * @returns {{name: *, html_url: *, avatar_url: *}}
+     * @returns {{id: *, name: *, htmlUrl: *, avatarUrl: *}}
      */
-    parseUser: function (name, url, avatar) {
+    parseUser: function (id, name, url, avatar) {
         return {
+            id: id,
             name: name,
             htmlUrl: url,
             avatarUrl: avatar

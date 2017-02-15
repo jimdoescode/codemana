@@ -3,15 +3,17 @@ const GistForm = require("./GistForm.js");
 
 module.exports = React.createClass({
     propTypes: {
-        user: React.PropTypes.shape({
-            logout: React.PropTypes.func,
-            isLoggedIn: React.PropTypes.func
-        }).isRequired,
-        origin: React.PropTypes.string
+        user: React.PropTypes.object,
+        origin: React.PropTypes.string,
+        onClickUserStatus: React.PropTypes.func,
     },
 
     getDefaultProps: function () {
-        return {origin: window.location.origin};
+        return {
+            user: null,
+            origin: window.location.origin,
+            onClickUserStatus: function () {}
+        };
     },
 
     render: function () {
@@ -22,7 +24,7 @@ module.exports = React.createClass({
                         <Logo className="pure-menu-heading pure-menu-link pull-left" origin={this.props.origin}/>
                         <GistForm className="pure-form pull-left pure-u-2-3"/>
                         <div className="pure-menu-heading pull-right">
-                            <UserStatus className="pure-menu-link " user={this.props.user}/>
+                            <UserStatus className="pure-menu-link" user={this.props.user} onClick={this.props.onClickUserStatus}/>
                         </div>
                     </div>
                 </nav>
@@ -56,34 +58,22 @@ const Logo = React.createClass({
 
 const UserStatus = React.createClass({
     propTypes: {
-        user: React.PropTypes.shape({
-            logout: React.PropTypes.func,
-            isLoggedIn: React.PropTypes.func
-        }).isRequired,
+        user: React.PropTypes.object,
+        onClick: React.PropTypes.func,
         className: React.PropTypes.string
     },
 
-    getDefaultProps: function () {
-        return {className: ''};
+    getDefaultProps: function() {
+        return {
+            user: null,
+            onClick: function () {},
+            className: ''
+        };
     },
 
-    onLogout: function (e) {
-        e.preventDefault();
-        this.props.user.logout();
-        this.forceUpdate();
-    },
-
-    onLogin: function (e) {
-        e.preventDefault();
-
-        document.dispatchEvent(
-            new CustomEvent('showLoginModal')
-        );
-    },
-
-    render: function () {
-        return this.props.user.isLoggedIn() ?
-            <a href="#" className={this.props.className} onClick={this.onLogout}>Logout <i className="fa fa-sign-out"/></a> :
-            <a href="#" className={this.props.className} onClick={this.onLogin}><i className="fa fa-github"/> Login</a>;
+    render: function() {
+        return this.props.user ?
+            <a href="#" className={this.props.className} onClick={this.props.onClick}>Logout <i className="fa fa-sign-out"/></a> :
+            <a href="#" className={this.props.className} onClick={this.props.onClick}><i className="fa fa-github"/> Login</a>;
     }
 });

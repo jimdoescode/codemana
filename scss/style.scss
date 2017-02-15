@@ -4,6 +4,7 @@
 a, .pure-menu-link, .pure-menu-heading {
     color: #ce6849;
     text-decoration: none;
+    outline: none;
 }
 a:hover {
     color: #ab4526;
@@ -176,6 +177,8 @@ footer {
                 overflow: hidden;
                 background-color: #282a2b;
                 min-width: 250px;
+
+                .edit {margin-right: 5px;}
             }
 
             .comment-body {
