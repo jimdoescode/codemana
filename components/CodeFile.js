@@ -148,6 +148,7 @@ const CommentsLine = React.createClass({
         var comments = this.props.comments.map(function(comment, index) {
             return (
                 <Comment key={"comment" + this.props.fileName + index}
+                         id={"comment" + this.props.fileName + index}
                          user={comment.user}
                          onReply={!comment.isOpen ? this.props.onReply.bind(null, this.props.fileName, this.props.lineNumber, index + 1, false) : null}
                          onEdit={!comment.isOpen && this.props.user && this.props.user.id === comment.user.id ? this.props.onEdit.bind(null, this.props.fileName, this.props.lineNumber, index, true) : null}>
@@ -209,6 +210,7 @@ const Line = React.createClass({
 
 const Comment = React.createClass({
     propTypes: {
+        id: React.PropTypes.string.isRequired,
         user: React.PropTypes.shape({
             htmlUrl: React.PropTypes.string,
             avatarUrl: React.PropTypes.string,
@@ -226,13 +228,13 @@ const Comment = React.createClass({
     },
 
     render: function() {
-        var headerLinks = [<a className="pull-left" href={this.props.user.htmlUrl} target="_blank">{this.props.user.name}</a>];
+        var headerLinks = [<a key={this.props.id + 'uname'} className="pull-left" href={this.props.user.htmlUrl} target="_blank">{this.props.user.name}</a>];
         if (this.props.onReply) {
-            headerLinks.push(<a key="reply" className="pull-right reply" href="#" onClick={this.props.onReply} title="Reply"><i className="fa fa-share"/></a>);
+            headerLinks.push(<a key={this.props.id + "reply"} className="pull-right reply" href="#" onClick={this.props.onReply} title="Reply"><i className="fa fa-share"/></a>);
         }
 
         if (this.props.onEdit) {
-            headerLinks.push(<a key="edit" className="pull-right edit" href="#" onClick={this.props.onEdit} title="Edit Comment"><i className="fa fa-pencil"/></a>);
+            headerLinks.push(<a key={this.props.id + "edit"} className="pull-right edit" href="#" onClick={this.props.onEdit} title="Edit Comment"><i className="fa fa-pencil"/></a>);
         }
 
 
