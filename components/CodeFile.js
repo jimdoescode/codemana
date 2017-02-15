@@ -16,7 +16,7 @@ module.exports = React.createClass({
         onSubmitComment: React.PropTypes.func
     },
 
-    getDefaultProps: function () {
+    getDefaultProps: function() {
         return {
             onAddEditComment: function (fileName, lineNumber, index, isEdit, e) {},
             onCancelComment: function (e) {},
@@ -24,7 +24,7 @@ module.exports = React.createClass({
         };
     },
 
-    render: function () {
+    render: function() {
         var lines = [];
         var lineCount = this.props.lines.length;
 
@@ -85,11 +85,11 @@ const CodeLine = React.createClass({
     },
 
     //Code lines don't need to update ever.
-    shouldComponentUpdate: function () {
+    shouldComponentUpdate: function() {
         return false;
     },
 
-    render: function () {
+    render: function() {
         return (
             <Line fileName={this.props.fileName} lineNumber={this.props.lineNumber} onClick={this.props.onClick.bind(null, this.props.fileName, this.props.lineNumber, 0, false)}>
                 <pre>
@@ -246,44 +246,6 @@ const Comment = React.createClass({
                     {this.props.children}
                 </div>
             </div>
-        );
-    }
-});
-
-const CommentToggle = React.createClass({
-    getInitialState: function() {
-        return {
-            display: 'none',
-            symbolClass: this.props.closeIcon
-        };
-    },
-
-    getDefaultProps: function() {
-        return {
-            toggle: '',
-            closeIcon: 'fa-comment-o fa-flip-horizontal',
-            openIcon: 'fa-comment fa-flip-horizontal'
-        };
-    },
-
-    handleClick: function(event) {
-        var elm = document.getElementById(this.props.toggle);
-        var display = elm.style.display;
-
-        event.preventDefault();
-        elm.style.display = this.state.display;
-
-        this.setState({
-            symbolClass: display === 'none' ? this.props.closeIcon : this.props.openIcon,
-            display: display
-        });
-    },
-
-    render: function() {
-        return (
-            <a href='#' onClick={this.handleClick}>
-                <i className={"fa " + this.state.symbolClass + " fa-fw"}/>
-            </a>
         );
     }
 });

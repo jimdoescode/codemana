@@ -1,4 +1,3 @@
-//Pull in the fetch shim
 require('whatwg-fetch');
 
 const Utils = require("./Utils.js");

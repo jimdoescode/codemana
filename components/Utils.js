@@ -106,15 +106,6 @@ module.exports = {
         return this.parseComment(comment.id, comment.body, this.parseGitHubUser(comment.user), false, false);
     },
 
-    /**
-     * Returns a basic comment object.
-     * @param id The id of this comment use 0 if it's new
-     * @param rawComment The raw text of a comment
-     * @param parsedUser The object returned by calling Utils.parseUser.
-     * @param isOpen If this is a new comment or an existing one.
-     * @param isPosting If this comment is currently being sent out
-     * @returns {*}
-     */
     parseComment: function (id, rawComment, parsedUser, isOpen, isPosting) {
         var filename = null;
         var body = '';
@@ -154,15 +145,6 @@ module.exports = {
         return this.parseUser(user.id, user.login, user.html_url, user.avatar_url);
     },
 
-    /**
-     * Returns a general user object.
-     *
-     * @param id
-     * @param name
-     * @param url
-     * @param avatar
-     * @returns {{id: *, name: *, htmlUrl: *, avatarUrl: *}}
-     */
     parseUser: function (id, name, url, avatar) {
         return {
             id: id,
@@ -172,18 +154,7 @@ module.exports = {
         };
     },
 
-    /**
-     * Returns a file object. This requires having a name
-     * and lines of syntax highlighted code.
-     *
-     * @param content
-     * @param language
-     * @param filename
-     * @returns {{name: *, lines: *}}
-     */
     parseFile: function (content, language, filename) {
-        // Plain text can't be syntax highlighted
-        // so just parse the lines and return.
         var lines = (language === 'Text') ?
             this.parseLines(content) :
             this.syntaxHighlight(content, language);

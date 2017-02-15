@@ -14,7 +14,7 @@ module.exports = React.createClass({
         onClose: React.PropTypes.func.isRequired
     },
 
-    getDefaultProps: function () {
+    getDefaultProps: function() {
         return {
             github: 'https://github.com',
             show: false,
@@ -24,7 +24,7 @@ module.exports = React.createClass({
         };
     },
 
-    render: function () {
+    render: function() {
         var form = (
             <form className="pure-form pure-form-stacked" onSubmit={e => this.props.onLogin(e.target.elements.namedItem("username").value.trim(), e.target.elements.namedItem("password").value)}>
                 <fieldset>

@@ -150,7 +150,6 @@ const GistRoute = React.createClass({
             <div className={"container main " + this.props.highlight}>
                 <HighlightSelector highlight={this.props.highlight} onHighlightChange={this.selectHighlight}/>
                 {
-                    //Show either a spinner or however many files there are in the gist.
                     this.props.loading ?
                         <Spinner/> :
                         this.props.files.map(function(file) {

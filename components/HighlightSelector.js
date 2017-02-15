@@ -10,7 +10,7 @@ module.exports = React.createClass({
         return this.props.highlight !== nextProps.highlight;
     },
 
-    render: function () {
+    render: function() {
         return (
             <div className="highlight-selector">
                 <select value={this.props.highlight} onChange={this.props.onHighlightChange}>

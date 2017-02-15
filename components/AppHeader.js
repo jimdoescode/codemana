@@ -8,7 +8,7 @@ module.exports = React.createClass({
         onClickUserStatus: React.PropTypes.func,
     },
 
-    getDefaultProps: function () {
+    getDefaultProps: function() {
         return {
             user: null,
             origin: window.location.origin,
@@ -16,7 +16,7 @@ module.exports = React.createClass({
         };
     },
 
-    render: function () {
+    render: function() {
         return (
             <header className="app-header">
                 <nav className="pure-menu pure-menu-horizontal pure-menu-fixed">
@@ -39,15 +39,15 @@ const Logo = React.createClass({
         className: React.PropTypes.string
     },
 
-    getDefaultProps: function () {
+    getDefaultProps: function() {
         return {className: ''};
     },
 
-    shouldComponentUpdate: function (newProps, newState) {
+    shouldComponentUpdate: function(newProps, newState) {
         return false;
     },
 
-    render: function () {
+    render: function() {
         return (
             <a className={this.props.className + " logo"} href={this.props.origin}>
                 <span>CODE</span><i className="fa fa-flask"/><span>MANA</span>

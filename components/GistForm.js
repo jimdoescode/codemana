@@ -22,7 +22,7 @@ module.exports = React.createClass({
             window.location = this.props.origin + "/" + gistId;
     },
 
-    shouldComponentUpdate: function (newProps, newState) {
+    shouldComponentUpdate: function(newProps, newState) {
         return false;
     },
 
