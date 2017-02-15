@@ -22,7 +22,7 @@ module.exports = React.createClass({
                 <nav className="pure-menu pure-menu-horizontal pure-menu-fixed">
                     <div className="container">
                         <Logo className="pure-menu-heading pure-menu-link pull-left" origin={this.props.origin}/>
-                        <GistForm className="pure-form pull-left pure-u-2-3"/>
+                        <GistForm origin={this.props.origin} className="pure-form pull-left pure-u-2-3"/>
                         <div className="pure-menu-heading pull-right">
                             <UserStatus className="pure-menu-link" user={this.props.user} onClick={this.props.onClickUserStatus}/>
                         </div>

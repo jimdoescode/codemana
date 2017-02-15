@@ -1,7 +1,12 @@
 const React  = require("react");
-const Config = require("./Config.js");
 
 module.exports = React.createClass({
+    propTypes: {
+        origin: React.PropTypes.string.isRequired,
+        className: React.PropTypes.string,
+        showButton: React.PropTypes.bool
+    },
+
     getDefaultProps: function() {
         return {
             className: "",
@@ -14,7 +19,7 @@ module.exports = React.createClass({
 
         var gistId = event.target.elements.namedItem("gistId").value.trim();
         if (gistId.length > 0)
-            window.location = Config.origin + "/" + gistId;
+            window.location = this.props.origin + "/" + gistId;
     },
 
     shouldComponentUpdate: function (newProps, newState) {

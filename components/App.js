@@ -82,12 +82,18 @@ const HomeRoute = React.createClass({
                     <p>
                         If you're curious <a href="https://github.com/jimdoescode/codemana">peruse the code</a>. It's comprised mostly of React components.
                     </p>
-                    <GistForm className="pure-form" showButton="true"/>
+                    <GistForm origin={this.props.origin} className="pure-form" showButton={true}/>
                 </section>
             </div>
         );
     }
 });
+
+function mapStateToHomeProps(state) {
+    return {
+        origin: state.config.origin
+    }
+}
 
 const GistRoute = React.createClass({
     componentDidMount: function() {
@@ -177,7 +183,7 @@ ReactDOM.render((
     <Provider store={Store()}>
         <Router history={browserHistory}>
             <Route name="app" path="/" component={Redux.connect(mapStateToAppProps)(App)}>
-                <IndexRoute component={HomeRoute}/>
+                <IndexRoute component={Redux.connect(mapStateToHomeProps)(HomeRoute)}/>
                 <Route name="gist" path="/:gistId" component={Redux.connect(mapStateToGistRouteProps)(GistRoute)}/>
             </Route>
         </Router>
