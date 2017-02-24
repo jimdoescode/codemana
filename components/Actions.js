@@ -142,14 +142,15 @@ module.exports.fetchComments = function(gistId) {
 
             for (var i=0; i < commentCount; i++) {
                 var parsed = Utils.parseGitHubComment(commentJson[i]);
+                if (parsed) {
+                    if (!comments[parsed.fileName])
+                        comments[parsed.fileName] = [];
 
-                if (!comments[parsed.fileName])
-                    comments[parsed.fileName] = [];
+                    if (!comments[parsed.fileName][parsed.lineNumber])
+                        comments[parsed.fileName][parsed.lineNumber] = [];
 
-                if (!comments[parsed.fileName][parsed.lineNumber])
-                    comments[parsed.fileName][parsed.lineNumber] = [];
-
-                comments[parsed.fileName][parsed.lineNumber].push(parsed);
+                    comments[parsed.fileName][parsed.lineNumber].push(parsed);
+                }
             }
             return comments;
         }).then(function(comments) {
