@@ -170,7 +170,7 @@ footer {
             margin-left: 6px;
             border-radius: .25em;
             overflow: hidden;
-            max-width: 800px;
+            max-width: 600px;
 
             .comment-header {
                 padding: 10px;
@@ -187,7 +187,10 @@ footer {
                 margin: 0;
                 background-color: #37393a;
 
-                p, pre {margin: 10px 0 0 0;}
+                p, pre {
+                    margin: 10px 0 0 0;
+                    line-height: 1.6em;
+                }
             }
 
             form.comment-body {
