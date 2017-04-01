@@ -23,6 +23,7 @@ pre {
     &::selection, ::selection {text-shadow: none;}
     &::-moz-selection, ::-moz-selection {text-shadow: none;}
 }
+p {line-height: 1.6em;}
 code {
     padding: 2px 0 4px 5px;
     font-family: Hack, Consolas, Monaco, 'Andale Mono', monospace;
@@ -189,7 +190,6 @@ footer {
 
                 p, pre {
                     margin: 10px 0 0 0;
-                    line-height: 1.6em;
                 }
             }
 
