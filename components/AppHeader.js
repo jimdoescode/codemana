@@ -50,7 +50,7 @@ const Logo = React.createClass({
     render: function() {
         return (
             <a className={this.props.className + " logo"} href={this.props.origin}>
-                <span>CODE</span><i className="fa fa-flask"/><span>MANA</span>
+                <span>CODE</span><i className="fa fa-flask" aria-hidden="true"/><span>MANA</span>
             </a>
         );
     }
@@ -73,7 +73,7 @@ const UserStatus = React.createClass({
 
     render: function() {
         return this.props.user ?
-            <a href="#" className={this.props.className} onClick={this.props.onClick}>Logout <i className="fa fa-sign-out"/></a> :
-            <a href="#" className={this.props.className} onClick={this.props.onClick}><i className="fa fa-github"/> Login</a>;
+            <a href="#" className={this.props.className} onClick={this.props.onClick}>Logout <i className="fa fa-sign-out" aria-hidden="true"/></a> :
+            <a href="#" className={this.props.className} onClick={this.props.onClick}><i className="fa fa-github" aria-hidden="true"/> Login</a>;
     }
 });
