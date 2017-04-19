@@ -60,13 +60,11 @@ module.exports = React.createClass({
                     <tbody>
                     <tr className="spacer line">
                         <td className="line-marker"/>
-                        <td className="line-num"/>
                         <td className="line-content"/>
                     </tr>
                     {lines}
                     <tr className="spacer line">
                         <td className="line-marker"/>
-                        <td className="line-num"/>
                         <td className="line-content"/>
                     </tr>
                     </tbody>
@@ -91,11 +89,16 @@ const CodeLine = React.createClass({
 
     render: function() {
         return (
-            <Line fileName={this.props.fileName} lineNumber={this.props.lineNumber} onClick={this.props.onClick.bind(null, this.props.fileName, this.props.lineNumber, 0, false)}>
-                <pre>
-                    <code dangerouslySetInnerHTML={{__html: this.props.code}}/>
-                </pre>
-            </Line>
+            <tr className="line">
+                <td className="line-marker">
+                    <span>{this.props.lineNumber}</span>
+                </td>
+                <td className="line-content" onClick={this.props.onClick.bind(null, this.props.fileName, this.props.lineNumber, 0, false)}>
+                    <pre>
+                        <code dangerouslySetInnerHTML={{__html: this.props.code}}/>
+                    </pre>
+                </td>
+            </tr>
         );
     }
 });
@@ -128,7 +131,8 @@ const CommentsLine = React.createClass({
 
     getInitialState: function() {
         return {
-            commentText: ''
+            commentText: '',
+            collapsed: false
         };
     },
 
@@ -144,8 +148,24 @@ const CommentsLine = React.createClass({
         })
     },
 
+    toggleComments: function(e) {
+        e.preventDefault();
+
+        this.setState({
+            collapsed: !this.state.collapsed
+        });
+    },
+
     render: function() {
         var comments = this.props.comments.map(function(comment, index) {
+            if (this.state.collapsed) {
+                return (
+                    <div className="avatar pull-left">
+                        <img src={comment.user.avatarUrl} alt={comment.user.name}/>
+                    </div>
+                );
+            }
+
             return (
                 <Comment key={"comment" + this.props.fileName + index}
                          id={"comment" + this.props.fileName + index}
@@ -169,39 +189,17 @@ const CommentsLine = React.createClass({
         }, this);
 
         return (
-            <Line fileName={this.props.fileName} style="line-comments">
-                {comments}
-            </Line>
-        );
-    }
-});
-
-const Line = React.createClass({
-    propTypes: {
-        //Make this a string so that it can be empty. It's only for display anyways.
-        lineNumber: React.PropTypes.number,
-        style: React.PropTypes.string,
-        fileName: React.PropTypes.string.isRequired,
-        toggle: React.PropTypes.string,
-        onClick: React.PropTypes.func
-    },
-
-    getDefaultProps: function() {
-        return {
-            lineNumber: 0,
-            style: '',
-            toggle: '',
-            onClick: function (fileName, lineNumber, index) {}
-        }
-    },
-
-    render: function() {
-        return (
-            <tr className={this.props.style.length > 0 ? "line " + this.props.style : "line"}>
-                <td className="line-marker"/>
-                <td className="line-num">{this.props.lineNumber > 0 ? this.props.lineNumber : ''}</td>
-                <td className="line-content" onClick={this.props.onClick.bind(null, this.props.fileName, this.props.lineNumber, 0)}>
-                    {this.props.children}
+            <tr className="line line-comments">
+                <td className="line-marker">
+                    <a href="#" onClick={this.toggleComments}>
+                        {this.state.collapsed ?
+                            <i className="fa fa-plus-square"/> :
+                            <i className="fa fa-minus-square"/>
+                        }
+                    </a>
+                </td>
+                <td className="line-content">
+                    {comments}
                 </td>
             </tr>
         );

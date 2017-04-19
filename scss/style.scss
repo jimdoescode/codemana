@@ -133,7 +133,7 @@ footer {
     }
 }
 
-.line-num {
+.line-marker {
     padding: 3px 7px 0;
     text-align: right;
     max-width: 35px;
@@ -149,16 +149,13 @@ footer {
 .pull-right {float: right;}
 
 .line-comments {
-    .line-content {padding: 3px 6px;}
-    .line-comment {
-        padding: 3px 0;
-        width: 100%;
-        overflow: hidden;
-        cursor: auto;
+    .line-content {
+        padding: 3px 6px;
 
         .avatar {
             width: 48px;
             height: 48px;
+            margin-right: 6px;
 
             img {
                 width: 100%;
@@ -166,9 +163,14 @@ footer {
                 border-radius: .25em;
             }
         }
+    }
+    .line-comment {
+        padding: 3px 0;
+        width: 100%;
+        overflow: hidden;
+        cursor: auto;
 
         .content {
-            margin-left: 6px;
             border-radius: .25em;
             overflow: hidden;
             max-width: 600px;
