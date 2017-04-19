@@ -23,7 +23,8 @@
   "scripts": {
     "build-dev-js": "node_modules/.bin/browserify -t [ babelify --presets [ es2015 react ] ] components/*.js -o public/js/script.js",
     "build-prod-js": "NODE_ENV=production node_modules/.bin/browserify -t [ babelify --presets [ es2015 react ] ] -g uglifyify components/*.js > public/js/script.js",
-    "build-dev-css": "node-sass ./scss/style.scss --output=./public/css",
+    "build-dev-css": "node_modules/.bin/node-sass ./scss/style.scss --output=./public/css",
+    "build-prod-css": "NODE_ENV=production node_modules/.bin/node-sass ./scss/style.scss --output-style=compressed --output=./public/css"
     "watch-js": "node_modules/.bin/watchify -t [ babelify --presets [ react ] ] components/*.js -o public/js/script.js",
     "start": "php -S 0.0.0.0:8000 -t ./public/",
     "clean": "rm public/js/script.js public/css/style.css"
