@@ -24,6 +24,38 @@ module.exports = React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {
+            expandedComments: [],
+        };
+    },
+
+    //Wrap the onAddEditComment property so we can expand
+    //a comment section when the comment form is shown.
+    addEditComment: function(fileName, lineNumber, index, isEdit, e) {
+        var expandedComments = this.state.expandedComments.slice(0);
+        expandedComments[lineNumber] = true;
+
+        this.setState({
+            expandedComments: expandedComments
+        });
+
+        this.props.onAddEditComment(fileName, lineNumber, index, isEdit, e);
+    },
+
+    toggleComment: function(lineNumber, e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        var expandedComments = this.state.expandedComments.slice(0);
+        expandedComments[lineNumber] = !expandedComments[lineNumber];
+
+        this.setState({
+            expandedComments: expandedComments
+        });
+    },
+
     render: function() {
         var lines = [];
         var lineCount = this.props.lines.length;
@@ -35,13 +67,14 @@ module.exports = React.createClass({
                           fileName={this.props.name}
                           lineNumber={num}
                           code={this.props.lines[i]}
-                          onClick={this.props.onAddEditComment}/>
+                          onClick={this.addEditComment}/>
             );
 
             //If comments exist for this line then add those in a new line just below.
             if (this.props.comments && this.props.comments[num] && this.props.comments[num].length > 0) {
                 lines.push(
                     <CommentsLine key={"commentsline" + this.props.name + num}
+                                  expanded={!!this.state.expandedComments[num]}
                                   fileName={this.props.name}
                                   lineNumber={num}
                                   user={this.props.user}
@@ -49,7 +82,8 @@ module.exports = React.createClass({
                                   onSubmit={this.props.onSubmitComment}
                                   onCancel={this.props.onCancelComment}
                                   onReply={this.props.onAddEditComment}
-                                  onEdit={this.props.onAddEditComment}/>
+                                  onEdit={this.props.onAddEditComment}
+                                  onToggle={this.toggleComment}/>
                 );
             }
         }
@@ -82,7 +116,7 @@ const CodeLine = React.createClass({
         onClick: React.PropTypes.func.isRequired
     },
 
-    //Code lines don't need to update ever.
+    //Code lines don't need to update, ever.
     shouldComponentUpdate: function() {
         return false;
     },
@@ -105,6 +139,7 @@ const CodeLine = React.createClass({
 
 const CommentsLine = React.createClass({
     propTypes: {
+        expanded: React.PropTypes.bool.isRequired,
         fileName: React.PropTypes.string.isRequired,
         lineNumber: React.PropTypes.number.isRequired,
         comments: React.PropTypes.arrayOf(
@@ -127,41 +162,35 @@ const CommentsLine = React.createClass({
         onCancel: React.PropTypes.func.isRequired,
         onReply: React.PropTypes.func.isRequired,
         onEdit: React.PropTypes.func.isRequired,
+        onToggle: React.PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
         return {
             commentText: '',
-            collapsed: false
         };
     },
 
     componentWillReceiveProps: function(nextProps) {
         this.setState({
-            commentText: ''
+            commentText: '',
         });
     },
 
     handleTextChange: function(e) {
         this.setState({
-            commentText: e.target.value
+            commentText: e.target.value,
         })
-    },
-
-    toggleComments: function(e) {
-        e.preventDefault();
-
-        this.setState({
-            collapsed: !this.state.collapsed
-        });
     },
 
     render: function() {
         var comments = this.props.comments.map(function(comment, index) {
-            if (this.state.collapsed) {
+            if (!this.props.expanded) {
                 return (
-                    <div className="avatar pull-left">
-                        <img src={comment.user.avatarUrl} alt={comment.user.name}/>
+                    <div key={"comment" + this.props.fileName + index} className="avatar pull-left">
+                        <a href="#" onClick={this.props.onToggle.bind(null, this.props.lineNumber)}>
+                            <img src={comment.user.avatarUrl} alt={comment.user.name}/>
+                        </a>
                     </div>
                 );
             }
@@ -191,14 +220,14 @@ const CommentsLine = React.createClass({
         return (
             <tr className="line line-comments">
                 <td className="line-marker">
-                    <a href="#" onClick={this.toggleComments}>
-                        {this.state.collapsed ?
-                            <i className="fa fa-plus-square"/> :
-                            <i className="fa fa-minus-square"/>
+                    <a href="#" onClick={this.props.onToggle.bind(null, this.props.lineNumber)}>
+                        {this.props.expanded ?
+                            <i className="fa fa-minus-square"/> :
+                            <i className="fa fa-plus-square"/>
                         }
                     </a>
                 </td>
-                <td className="line-content">
+                <td className={this.props.expanded ? 'line-content' : 'line-content-collapsed'}>
                     {comments}
                 </td>
             </tr>
