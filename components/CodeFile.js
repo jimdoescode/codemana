@@ -220,7 +220,7 @@ const CommentsLine = React.createClass({
         return (
             <tr className="line line-comments">
                 <td className="line-marker">
-                    <a href="#" onClick={this.props.onToggle.bind(null, this.props.lineNumber)}>
+                    <a href="#" title="Toggle Comments" onClick={this.props.onToggle.bind(null, this.props.lineNumber)}>
                         {this.props.expanded ?
                             <i className="fa fa-minus-square"/> :
                             <i className="fa fa-plus-square"/>
