@@ -1,6 +1,9 @@
 @import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700);
 @import "pure-min";
 
+$comment-width: 600;
+$comment-padding: 10;
+
 a, .pure-menu-link, .pure-menu-heading {
     color: #ce6849;
     text-decoration: none;
@@ -179,10 +182,10 @@ footer {
         .content {
             border-radius: .25em;
             overflow: hidden;
-            max-width: 600px;
+            max-width: $comment-width + unquote("px");
 
             .comment-header {
-                padding: 10px;
+                padding: $comment-padding + unquote("px");
                 overflow: hidden;
                 background-color: #282a2b;
                 min-width: 250px;
@@ -192,9 +195,15 @@ footer {
 
             .comment-body {
                 color: #eee;
-                padding: 1px 10px 10px 10px;
+                padding: 1px $comment-padding+unquote("px") $comment-padding+unquote("px") $comment-padding+unquote("px");
                 margin: 0;
                 background-color: #37393a;
+
+                pre {
+                    background-color: #282a2b;
+                    padding: 0 5px 5px 0;
+                    overflow: auto;
+                }
 
                 p, pre {
                     margin: 10px 0 0 0;
@@ -202,14 +211,14 @@ footer {
             }
 
             form.comment-body {
-                padding-top: 10px;
+                padding-top: $comment-padding + unquote("px");
 
                 textarea {
                     color: #000;
-                    width: 770px;
+                    width: ($comment-width - 6 - (2 * $comment-padding)) + unquote("px");
                     height: 175px;
                     display: block;
-                    margin-bottom: 10px;
+                    margin-bottom: $comment-padding + unquote("px");
                     padding: 2px;
                 }
             }
