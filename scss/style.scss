@@ -22,6 +22,9 @@ pre {
     border-radius: inherit;
     color: inherit;
     overflow: hidden;
+
+    &::selection, ::selection {text-shadow: none;}
+    &::-moz-selection, ::-moz-selection {text-shadow: none;}
 }
 p {line-height: 1.6em;}
 code {
@@ -64,12 +67,6 @@ code {
             .fa-flask {color: #4383c1;}
         }
     }
-}
-
-.avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: .25em;
 }
 
 .button-primary {
@@ -155,15 +152,6 @@ footer {
 .pull-right {float: right;}
 
 .line-comments {
-    .line-content-collapsed {
-        padding: 3px 6px;
-
-        .avatar {
-            width: 24px;
-            height: 24px;
-            margin-right: 3px;
-        }
-    }
     .line-content {
         padding: 3px 6px;
 
@@ -171,6 +159,12 @@ footer {
             width: 48px;
             height: 48px;
             margin-right: 6px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                border-radius: .25em;
+            }
         }
     }
     .line-comment {
@@ -201,7 +195,7 @@ footer {
 
                 pre {
                     background-color: #282a2b;
-                    padding: 0 5px 5px 0;
+                    padding: 5px;
                     overflow: auto;
                 }
 
