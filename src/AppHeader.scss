@@ -1,0 +1,38 @@
+@import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700);
+
+.app-header nav {
+    border-bottom: 1px solid #000;
+    background-color: #282a2b;
+    height: 50px;
+    font-size: 12pt;
+    padding-top: 0.5em;
+
+    .pure-form {
+        margin-left: 3em;
+
+        input[type="text"] {padding: 0.3em 0.3em;}
+    }
+
+    .pure-menu-link {
+        padding-top: 0;
+        outline: none;
+
+        &:focus, &:hover {
+            background-color: transparent;
+            text-decoration: none;
+        }
+    }
+    .logo {
+        font-size: 16pt;
+        padding: 0;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
+
+        .fa-flask {
+            font-size: 18pt;
+            color: #54b0ff;
+        }
+        &:hover, &:focus {
+            .fa-flask {color: #4383c1;}
+        }
+    }
+}

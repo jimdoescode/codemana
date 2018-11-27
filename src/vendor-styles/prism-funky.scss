@@ -1,0 +1,85 @@
+/**
+ * prism.js Funky theme
+ * Based on “Polyfilling the gaps” talk slides http://lea.verou.me/polyfilling-the-gaps/
+ * @author Lea Verou
+ */
+
+/* Code blocks */
+
+.funky {
+    .code-file {
+        background: url('data:image/svg+xml;charset=utf-8,<svg%20version%3D"1.1"%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"100"%20height%3D"100"%20fill%3D"rgba(0%2C0%2C0%2C.2)">%0D%0A<polygon%20points%3D"0%2C50%2050%2C0%200%2C0"%20%2F>%0D%0A<polygon%20points%3D"0%2C100%2050%2C100%20100%2C50%20100%2C0"%20%2F>%0D%0A<%2Fsvg>');
+        background-size: 1em 1em;
+        color: #eee;
+        background-color: #aaa;
+    }
+    code {
+        background-color: #282a2b;
+        box-shadow: -.3em 0 0 .3em #282a2b, .3em 0 0 .3em #282a2b;
+    }
+
+    .line-marker {background-color: rgba(40, 42, 43, 0.75);}
+
+    .namespace {
+        opacity: .7;
+    }
+
+    .token {
+        &.comment, &.prolog,
+        &.doctype, &.cdata {
+            color: #aaa;
+        }
+
+        &.punctuation {
+            color: #999;
+        }
+
+        &.property, &.tag,
+        &.boolean, &.number,
+        &.constant, &.symbol {
+            color: #0cf;
+        }
+
+        &.selector, &.attr-name,
+        &.string, &.char,
+        &.builtin {
+            color: #ff0;
+        }
+
+        &.atrule, &.attr-value,
+        &.keyword {
+            color: #ff1493;
+        }
+
+        &.regex, &.important {
+            color: #ffa500;
+        }
+
+        &.important, &.bold {
+            font-weight: bold;
+        }
+
+        &.italic {
+            font-style: italic;
+        }
+
+        &.entity {
+            cursor: help;
+        }
+
+        &.deleted {
+            color: #f00;
+        }
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .toke.variable,
+    .token.inserted {
+        color: #9acd32;
+    }
+}
+
+

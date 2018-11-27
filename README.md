@@ -1,8 +1,16 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Code Mana
+=========
 
-## Available Scripts
+A Gist enhancement web app. It allows for inline commenting and alternate syntax highlighting styles.
 
-In the project directory, you can run:
+About
+-----
+
+Code Mana is built almost entirely in React. It requires no third party server and talks only with GitHub.
+I made this mostly to tinker with React and learn more modern front end techniques.
+
+Scripts
+--------
 
 ### `npm start`
 
@@ -27,18 +35,19 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+Configuration
+-------------
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+If you'd like to use codemana on an internal network or use an enterprise version of GitHub you can change the values in  `./src/Config.js` to your preferences. After you change the configs you should recompile and make sure a server is pointing at the public folder.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+TODO
+----
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+ + ~~I'd like to replace the current router with one that works without page refreshes. That will allow me to host this app exclusively on a GitHub page.~~
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+ + ~~Use Sass instead of hard coded CSS. Then I can move the styling into the app directory and add more compilation and better minification.~~
+   - ~~This means moving the syntax highlighting styling out of the head.~~
 
-## Learn More
+ + Update prismjs to properly work with requirejs. Right now I can't have prism as an npm dependency because it won't support all the languages I want.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+ + More syntax highlighting styles! In particular styles for colorblind folks.

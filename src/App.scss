@@ -1,0 +1,71 @@
+@import "vendor-styles/pure-min";
+@import "vendor-styles/font-awesome.scss";
+
+/* Import all of our syntax highlighting styles */
+@import "vendor-styles/prism-dark";
+@import "vendor-styles/prism-funky";
+@import "vendor-styles/prism-okaidia";
+@import "vendor-styles/prism-twilight";
+
+$background: #37393a;
+$primary: #4383c1;
+$secondary: #ab4526;
+
+a, .button-link, .pure-menu-link, .pure-menu-heading {
+    color: #ce6849;
+    text-decoration: none;
+    outline: none;
+}
+a:hover, .button-link:hover {
+    color: $secondary;
+    text-decoration: underline;
+}
+body {background-color: $background;}
+pre {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    border-radius: inherit;
+    color: inherit;
+    overflow: hidden;
+
+    &::selection, ::selection {text-shadow: none;}
+    &::-moz-selection, ::-moz-selection {text-shadow: none;}
+}
+p {line-height: 1.6em;}
+code {
+    padding: 2px 0 4px 5px;
+    font-family: Hack, Consolas, Monaco, 'Andale Mono', monospace;
+}
+
+.button-primary {
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: $primary;
+    margin-right: 10px;
+}
+
+.button-error {
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: $secondary;
+}
+
+.button-link {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    font: inherit;
+    cursor: pointer;
+}
+
+.main {padding-top: 50px;}
+
+.container {
+    width: 1140px;
+    margin: auto;
+}
+
+.pull-left {float: left;}
+.pull-right {float: right;}

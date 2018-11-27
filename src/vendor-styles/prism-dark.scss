@@ -1,0 +1,71 @@
+/**
+ * prism.js Dark theme for JavaScript, CSS and HTML
+ * Based on the slides of the talk “/Reg(exp){2}lained/”
+ * @author Lea Verou
+ */
+
+.dark {
+    .line {
+        color: #fff;
+        background: hsl(30, 20%, 25%);
+    }
+
+    .namespace {
+        opacity: .7;
+    }
+
+    &.comment, &.prolog,
+    &.doctype, &.cdata {
+        color: hsl(30, 20%, 50%);
+    }
+
+    &.punctuation {
+        opacity: .7;
+    }
+
+    &.property, &.tag,
+    &.boolean, &.number,
+    &.constant, &.symbol {
+        color: hsl(350, 40%, 70%);
+    }
+
+    &.selector, &.attr-name,
+    &.string, &.char,
+    &.builtin, &.inserted {
+        color: hsl(75, 70%, 60%);
+    }
+
+    &.atrule, &.attr-value,
+    &.keyword {
+        color: hsl(350, 40%, 70%);
+    }
+
+    &.regex, &.important {
+        color: #e90;
+    }
+
+    &.important, &.bold {
+        font-weight: bold;
+    }
+
+    &.italic {
+        font-style: italic;
+    }
+
+    &.entity {
+        cursor: help;
+    }
+
+    &.deleted {
+        color: red;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string,
+    .token.variable {
+        color: hsl(40, 90%, 60%);
+    }
+}
