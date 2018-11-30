@@ -9,8 +9,7 @@ class CodeFile extends Component {
         super(props);
 
         this.state = {
-            collapsedComments: [],
-            initiallyCollapsed: true
+            collapsedComments: []
         };
 
         // In React components declared as ES6 classes, methods follow the same semantics
@@ -41,7 +40,7 @@ class CodeFile extends Component {
         this.setState((state) => {
             let collapsedComments = state.collapsedComments.slice();
             collapsedComments[lineNumber] = collapsedComments[lineNumber] === undefined ?
-                !state.initiallyCollapsed :
+                !this.props.collapseCommentsOnLoad :
                 !collapsedComments[lineNumber];
 
             return {collapsedComments: collapsedComments}
@@ -68,7 +67,7 @@ class CodeFile extends Component {
                     <CommentsLine key={"commentsline" + this.props.name + num}
                                   collapsed={
                                       this.state.collapsedComments[num] === undefined ?
-                                          this.state.initiallyCollapsed :
+                                          this.props.collapseCommentsOnLoad :
                                           this.state.collapsedComments[num]
                                   }
                                   fileName={this.props.name}
@@ -114,6 +113,7 @@ CodeFile.propTypes = {
         avatarUrl: PropTypes.string.isRequired
     }),
     comments: PropTypes.array,
+    collapseCommentsOnLoad: PropTypes.bool,
     onAddEditComment: PropTypes.func,
     onCancelComment: PropTypes.func,
     onSubmitComment: PropTypes.func
@@ -122,7 +122,8 @@ CodeFile.propTypes = {
 CodeFile.defaultProps = {
     onAddEditComment: function (fileName, lineNumber, index, isEdit, e) {},
     onCancelComment: function (e) {},
-    onSubmitComment: function (comment, commentText, e) {}
+    onSubmitComment: function (comment, commentText, e) {},
+    collapseCommentsOnLoad: true
 };
 
 export default CodeFile;
@@ -353,8 +354,4 @@ CommentCollapsed.propTypes = {
         avatarUrl: PropTypes.string,
         name: PropTypes.string
     }).isRequired
-};
-
-CommentCollapsed.defaultProps = {
-    onExpand: null
 };
