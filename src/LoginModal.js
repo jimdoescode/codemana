@@ -11,7 +11,8 @@ Modal.setAppElement(document.getElementById('root'));
 
 class LoginModal extends Component {
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.processing !== nextProps.processing;
+        return this.props.processing !== nextProps.processing ||
+            this.props.show !== nextProps.show;
     }
 
     render() {
