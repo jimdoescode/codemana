@@ -9,21 +9,22 @@ class CodeFile extends Component {
         super(props);
 
         this.state = {
-            collapsedComments: []
+            collapsedComments: [],
+            initiallyCollapsed: true
         };
 
         // In React components declared as ES6 classes, methods follow the same semantics
         // as regular ES6 classes. This means that they don’t automatically bind this to
         // the instance. You have to explicitly use .bind(this) in the constructor
         this.addEditComment = this.addEditComment.bind(this);
-        this.toggleComment = this.toggleComment.bind(this);
+        this.toggleComments = this.toggleComments.bind(this);
     }
 
     //Wrap the onAddEditComment property so we can expand
     //a comment section when the comment form is shown.
     addEditComment(fileName, lineNumber, index, isEdit, e) {
         this.setState((state) => {
-            let collapsedComments = state.collapsedComments.slice(0);
+            let collapsedComments = state.collapsedComments.slice();
             collapsedComments[lineNumber] = false;
 
             return {collapsedComments: collapsedComments};
@@ -32,14 +33,16 @@ class CodeFile extends Component {
         this.props.onAddEditComment(fileName, lineNumber, index, isEdit, e);
     }
 
-    toggleComment(lineNumber, e) {
+    toggleComments(lineNumber, e) {
         if (e) {
             e.preventDefault();
         }
 
         this.setState((state) => {
-            let collapsedComments = state.collapsedComments.slice(0);
-            collapsedComments[lineNumber] = !collapsedComments[lineNumber];
+            let collapsedComments = state.collapsedComments.slice();
+            collapsedComments[lineNumber] = collapsedComments[lineNumber] === undefined ?
+                !state.initiallyCollapsed :
+                !collapsedComments[lineNumber];
 
             return {collapsedComments: collapsedComments}
         });
@@ -63,16 +66,20 @@ class CodeFile extends Component {
             if (this.props.comments && this.props.comments[num] && this.props.comments[num].length > 0) {
                 lines.push(
                     <CommentsLine key={"commentsline" + this.props.name + num}
-                                  collapsed={!!this.state.collapsedComments[num]}
+                                  collapsed={
+                                      this.state.collapsedComments[num] === undefined ?
+                                          this.state.initiallyCollapsed :
+                                          this.state.collapsedComments[num]
+                                  }
                                   fileName={this.props.name}
                                   lineNumber={num}
                                   user={this.props.user}
                                   comments={this.props.comments[num]}
-                                  onSubmit={this.props.onSubmitComment}
-                                  onCancel={this.props.onCancelComment}
-                                  onReply={this.props.onAddEditComment}
-                                  onEdit={this.props.onAddEditComment}
-                                  onToggle={this.toggleComment}/>
+                                  onSubmitComment={this.props.onSubmitComment}
+                                  onCancelComment={this.props.onCancelComment}
+                                  onReplyComment={this.props.onAddEditComment}
+                                  onEditComment={this.props.onAddEditComment}
+                                  onToggle={this.toggleComments}/>
                 );
             }
         }
@@ -122,13 +129,13 @@ export default CodeFile;
 
 class CodeLine extends Component {
     //Code lines don't need to update, ever.
-    shouldComponentUpdate() {
+    static shouldComponentUpdate(nextProps, nextState) {
         return false;
     }
 
     render() {
         return (
-            <tr className="line">
+            <tr id={this.props.fileName + "-L" + this.state.lineNumber} className="line">
                 <td className="line-marker">
                     <span>{this.props.lineNumber}</span>
                 </td>
@@ -149,56 +156,23 @@ CodeLine.propTypes = {
     onClick: PropTypes.func.isRequired
 };
 
-
 class CommentsLine extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            commentText: ''
-        };
-
-        this.handleTextChange = this.handleTextChange.bind(this);
-    }
-
-    //componentWillReceiveProps: function(nextProps) {
-    //    this.setState({
-    //        commentText: '',
-    //    });
-    //},
-
-    handleTextChange(e) {
-        this.setState({
-            commentText: e.target.value,
-        })
-    }
-
     render() {
         var comments = this.props.comments.map(function(comment, index) {
             if (this.props.collapsed) {
-                return (
-                    <CommentCollapsed key={"comment" + this.props.fileName + index}
-                                      user={comment.user}
-                                      onExpand={this.props.onToggle.bind(null, this.props.lineNumber)}/>
-                );
+                return <CommentCollapsed key={"comment" + this.props.fileName + index} user={comment.user}/>;
             }
 
             return (
                 <Comment key={"comment" + this.props.fileName + index}
                          id={"comment" + this.props.fileName + index}
                          user={comment.user}
-                         onReply={!comment.isOpen ? this.props.onReply.bind(null, this.props.fileName, this.props.lineNumber, index + 1, false) : null}
-                         onEdit={!comment.isOpen && this.props.user && this.props.user.id === comment.user.id ? this.props.onEdit.bind(null, this.props.fileName, this.props.lineNumber, index, true) : null}>
+                         onReply={!comment.isOpen ? this.props.onReplyComment.bind(null, this.props.fileName, this.props.lineNumber, index + 1, false) : null}
+                         onEdit={!comment.isOpen && this.props.user && this.props.user.id === comment.user.id ? this.props.onEditComment.bind(null, this.props.fileName, this.props.lineNumber, index, true) : null}>
                     {comment.isOpen ?
-                        <form action="#" onSubmit={this.props.onSubmit.bind(null, comment, this.state.commentText)} className="comment-body">
-                            <textarea name="text" placeholder="Enter your comment..." defaultValue={comment.rawBody} onChange={this.handleTextChange}/>
-                            <button type="submit" className={"pure-button button-primary" + (comment.isPosting ? " pure-button-disabled" : "")} disabled={comment.isPosting}>
-                                <i className="fa fa-comment"/> Comment
-                            </button>
-                            <button type="button" className={"pure-button button-error" + (comment.isPosting ? " pure-button-disabled" : "")} onClick={this.props.onCancel} disabled={comment.isPosting}>
-                                <i className="fa fa-times-circle"/> Cancel
-                            </button>
-                        </form> :
+                        <CommentForm onSubmit={this.props.onSubmitComment}
+                                     onCancel={this.props.onCancelComment}
+                                     comment={comment}/> :
                         <div className="comment-body" dangerouslySetInnerHTML={{__html: comment.body}}/>
                     }
                 </Comment>
@@ -215,7 +189,8 @@ class CommentsLine extends Component {
                         }
                     </button>
                 </td>
-                <td className={"line-content" + (this.props.collapsed ? " collapsed" : "")}>
+                <td className={"line-content" + (this.props.collapsed ? " collapsed-comments" : "")}
+                    onClick={this.props.collapsed ? this.props.onToggle.bind(null, this.props.lineNumber) : null}>
                     {comments}
                 </td>
             </tr>
@@ -243,11 +218,79 @@ CommentsLine.propTypes = {
             isOpen: PropTypes.bool.isRequired
         })
     ).isRequired,
+    onSubmitComment: PropTypes.func.isRequired,
+    onCancelComment: PropTypes.func.isRequired,
+    onReplyComment: PropTypes.func.isRequired,
+    onEditComment: PropTypes.func.isRequired,
+    onToggle: PropTypes.func.isRequired,
+};
+
+class CommentForm extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            commentText: props.comment.rawBody
+        };
+
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.isPosting !== nextProps.isPosting;
+    }
+
+    handleTextChange(e) {
+        this.setState({
+            commentText: e.target.value,
+        })
+    }
+
+    handleSubmit(e) {
+        this.props.onSubmit(this.props.comment, this.state.commentText, e);
+    }
+
+    render() {
+        return (
+            <form action="#" onSubmit={this.handleSubmit} className="comment-body">
+                <textarea name="text"
+                          placeholder="Enter your comment..."
+                          defaultValue={this.props.comment.rawBody}
+                          onChange={this.handleTextChange}/>
+                <button type="submit"
+                        className={"pure-button button-primary" + (this.props.comment.isPosting ? " pure-button-disabled" : "")}
+                        disabled={this.props.comment.isPosting}>
+                    <i className="fa fa-comment"/> Comment
+                </button>
+                <button type="button"
+                        className={"pure-button button-error" + (this.props.comment.isPosting ? " pure-button-disabled" : "")}
+                        onClick={this.props.onCancel}
+                        disabled={this.props.comment.isPosting}>
+                    <i className="fa fa-times-circle"/> Cancel
+                </button>
+            </form>
+        );
+    }
+}
+
+CommentForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    onReply: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    onToggle: PropTypes.func.isRequired,
+    comment: PropTypes.shape({
+        id: PropTypes.number,
+        fileName: PropTypes.string.isRequired,
+        lineNumber: PropTypes.number.isRequired,
+        body: PropTypes.string,
+        rawBody: PropTypes.string,
+        user: PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            htmlUrl: PropTypes.string.isRequired,
+            avatarUrl: PropTypes.string.isRequired
+        }),
+        isOpen: PropTypes.bool.isRequired
+    }).isRequired
 };
 
 class Comment extends Component {
@@ -292,12 +335,14 @@ Comment.defaultProps = {
 };
 
 class CommentCollapsed extends Component {
+    static shouldComponentUpdate(nextProps, nextState) {
+        return false;
+    }
+
     render() {
         return (
             <div className="avatar pull-left">
-                <button className="button-link" onClick={this.props.onExpand}>
-                    <img src={this.props.user.avatarUrl} alt={this.props.user.name}/>
-                </button>
+                <img src={this.props.user.avatarUrl} alt={this.props.user.name}/>
             </div>
         );
     }
@@ -307,8 +352,7 @@ CommentCollapsed.propTypes = {
     user: PropTypes.shape({
         avatarUrl: PropTypes.string,
         name: PropTypes.string
-    }).isRequired,
-    onExpand: PropTypes.func
+    }).isRequired
 };
 
 CommentCollapsed.defaultProps = {
