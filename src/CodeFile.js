@@ -136,7 +136,7 @@ class CodeLine extends Component {
 
     render() {
         return (
-            <tr id={this.props.fileName + "-L" + this.state.lineNumber} className="line">
+            <tr id={this.props.fileName + "-L" + this.props.lineNumber} className="line">
                 <td className="line-marker">
                     <span>{this.props.lineNumber}</span>
                 </td>
