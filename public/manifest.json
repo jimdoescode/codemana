@@ -1,6 +1,6 @@
 {
-  "short_name": "Code Mana",
-  "name": "Code Mana Enhanced GitHub Gists",
+  "short_name": "CodeMana",
+  "name": "CodeMana Enhanced GitHub Gists",
   "icons": [
     {
       "src": "favicon.ico",
@@ -11,5 +11,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#37393a"
 }

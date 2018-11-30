@@ -5,6 +5,7 @@
   "author": "Jim S",
   "license": "MIT",
   "repository": "https://github.com/jimdoescode/codemana",
+  "homepage": "https://codemana.com",
   "private": true,
   "dependencies": {
     "marked": "^0.5.2",
