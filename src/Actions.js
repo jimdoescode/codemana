@@ -203,6 +203,12 @@ export function postComment(gistId, comment, commentText) {
             url += '/' + comment.id;
         }
 
+        // If the comment hasn't changed then save the http request
+        if (comment.rawBody === commentText) {
+            dispatch(hideCommentForm());
+            return Promise.resolve();
+        }
+
         dispatch(requestPostComment(gistId, comment));
 
         var commentBody = Utils.createCommentLink(gistId, comment.fileName, comment.lineNumber) + ' ' + commentText;
