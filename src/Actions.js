@@ -33,9 +33,9 @@ function receiveLogin(token, user, showLoginModal) {
 export function userLogin(user, password) {
     return function(dispatch, getState) {
         var state = getState();
-        var token = window.btoa(user + ':' + password);
+        var token = window.btoa(user.trim() + ':' + password.trim());
 
-        dispatch(requestLogin(user, password));
+        dispatch(requestLogin(user.trim(), password.trim()));
 
         return Promise.race([
             Utils.timeoutPromise(),
